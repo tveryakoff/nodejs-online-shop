@@ -6,19 +6,32 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Add-product</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/add-product.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/admin/add-product">Add product</a>
-        </nav>
-    </header>
-    <section>
-        <form action="/admin/add-product" method="POST">
-            <input type="text" name="title">
-            <button type="submit">Add</button>
+<header class="main-header">
+    <nav class="main-header__nav">
+        <ul class="main-header__list">
+            <li>
+                <a class="main-header__link" href="/">Home</a>
+            </li>
+            <li>
+                <a class="main-header__link" href="/admin/add-product">Add product</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+    <div class="wrapper">
+    <section class="main-section">
+        <form class="add-product-form" action="/admin/add-product" method="POST">
+            <div class="input-wrapper">
+            <label class="input-label" for="title">Name</label>
+            <input id="title" class="add-product-form__input" type="text" name="title">
+            </div>
+            <button class="add-product-form__button" type="submit">Add</button>
         </form>
     </section>
+    </div>
 </body>
 </html>

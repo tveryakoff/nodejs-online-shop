@@ -6,17 +6,27 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Home page</title>
+    <link rel="stylesheet" href="/css/main.css">
+
 </head>
 <body>
-<header>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/admin/add-product">Add product</a>
+<header class="main-header">
+    <nav class="main-header__nav">
+        <ul class="main-header__list">
+            <li>
+                <a class="main-header__link" href="/">Home</a>
+            </li>
+            <li>
+            <a class="main-header__link" href="/admin/add-product">Add product</a>
+            </li>
+        </ul>
     </nav>
 </header>
-<section>
+<div class="wrapper">
+<section class="main-section">
     <h1>My shop</h1>
     <h2>Product List</h2>
 </section>
+</div>
 </body>
 </html>

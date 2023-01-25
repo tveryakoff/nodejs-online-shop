@@ -6,6 +6,7 @@ const rootDir = require('./constants/rootDir')
 const app = express()
 
 app.use(express.urlencoded({extended: true}))
+app.use(express.static(path.join(rootDir, 'public')))
 
 app.use('/admin', adminRouts)
 app.use(shopRoutes)
