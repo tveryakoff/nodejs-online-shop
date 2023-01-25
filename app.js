@@ -1,5 +1,7 @@
 const express = require('express')
 const {shopRoutes, adminRouts} = require('./routing')
+const path = require('path')
+const rootDir = require('./constants/rootDir')
 
 const app = express()
 
@@ -9,7 +11,7 @@ app.use('/admin', adminRouts)
 app.use(shopRoutes)
 
 app.use((req,res,next) => {
-  res.status(404).send(`<h1>Page not found</h1>`)
+  res.status(404).sendFile(path.join(rootDir, 'views', 'errors', '404.html'))
 })
 
 
