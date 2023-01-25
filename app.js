@@ -1,13 +1,16 @@
-const http = require('http')
 const express = require('express')
+const {shopRoutes, adminRouts} = require('./routing')
 
 const app = express()
 
-const server = http.createServer(app);
+app.use(express.urlencoded({extended: true}))
 
-app.use((req, res, next) => {
-  console.log('inside middleware')
-  next()
+app.use('/admin', adminRouts)
+app.use(shopRoutes)
+
+app.use((req,res,next) => {
+  res.status(404).send(`<h1>Page not found</h1>`)
 })
 
-server.listen(3000);
+
+app.listen(3000)
