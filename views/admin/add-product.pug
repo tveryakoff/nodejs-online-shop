@@ -1,0 +1,12 @@
+extends ../layouts/main.pug
+
+block styles
+  link(rel="stylesheet", href="/css/add-product.css")
+block content
+  section.main-section
+    form.add-product-form(action="/admin/add-product", method="POST")
+      .input-wrapper
+        label.input-label(for="title") Name
+        input.add-product-form__input(id="title", type="text", name="title")
+      button.add-product-form__button(type="submit") Add
+

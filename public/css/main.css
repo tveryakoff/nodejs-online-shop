@@ -37,6 +37,10 @@
     color: #252525;
 }
 
+.main-header__link-active {
+    color: purple;
+}
+
 .main-header__link:hover {
     color: #1389b6;
 }

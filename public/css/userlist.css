@@ -1,0 +1,9 @@
+.user-list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.user-list__item {
+    margin-bottom: 1rem;
+}
