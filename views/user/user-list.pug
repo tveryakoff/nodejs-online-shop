@@ -1,0 +1,11 @@
+extends ../layouts/users-main.pug
+
+block content
+  section.main-section
+    if userList.length > 0
+      div.user-list
+        each user in userList
+          article.user
+            h2 #{user.name}
+    else
+      h1 No users

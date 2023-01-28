@@ -1,0 +1,9 @@
+extends ../layouts/users-main.pug
+
+block content
+  section.main-section
+    form(action='/users/user', method='POST')
+      .input-wrapper
+      label.input-label(for="name") Name
+      input.add-product-form__input(id="name", type="text", name="name")
+      button.add-product-form__button(type="submit") Add User
