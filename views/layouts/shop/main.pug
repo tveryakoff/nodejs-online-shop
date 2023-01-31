@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title #{pageTitle}
+    link(rel="stylesheet", href="/css/main.css")
+    block styles
+  body
+    header.main-header
+      nav.main-header__nav
+        ul.main-header__list
+          li
+            a.main-header__link(href="/", class=(path === '/' ? 'main-header__link-active' : '')) Shop
+          li
+            a.main-header__link(href="/product-list", class=(path==='/product-list' ? 'main-header__link-active' : '')) Products
+          li
+            a.main-header__link(href="/cart", class=(path==='/cart' ? 'main-header__link-active' : '')) Cart
+          li
+            a.main-header__link(href="/order-list", class=(path === '/order-list' ? 'main-header__link-active' : '')) Orders
+          li
+            a.main-header__link(href="/admin/add-product", class=(path==="/admin/add-product" ? 'main-header__link-active' : '')) Add Product
+          li
+            a.main-header__link(href="/admin/product-list", class=(path==="/admin/product-list" ? 'main-header__link-active' : '')) Shop list admin
+
+    main
+      div.wrapper
+        block content
+

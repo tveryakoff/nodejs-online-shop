@@ -8,7 +8,11 @@ const getProductsFromFile = (cb) => {
   fs.readFile(productFilePath, (err, fileContent) => {
     let products = []
     if (!err) {
-      products = JSON.parse(fileContent)
+      try {
+        products = JSON.parse(fileContent)
+      } catch (error) {
+        console.error('error while parsing products from file', error)
+      }
     }
 
     cb(products)

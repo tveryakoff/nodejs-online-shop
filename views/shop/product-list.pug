@@ -1,4 +1,4 @@
-extends ../layouts/main.pug
+extends ../layouts/shop/main
 
 block styles
   link(rel="stylesheet", href="/css/shop.css")
@@ -10,12 +10,13 @@ block content
           header.card-header
             h1.product-title #{product.title}
           div.card__image
-            img(src="test", alt="product-image")
+            img(src=product.imageUrl, alt="product-image")
           div.card__content
-            h2.product__price $19.99
-            p.product__description A very interesting book about so many even more
+            h2.product__price #{product.price}$
+            p.product__description #{product.description}
           div.card__actions
-            button.btn Add to Cart
+            form(action='/add-to-cart', method='POST')
+              button.btn(type="submit") Add to Cart
   else
     h1 No products
 

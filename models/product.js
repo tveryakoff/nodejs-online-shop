@@ -7,8 +7,8 @@ const productFilePath = path.join(rootDir, 'data', 'products.json')
 
 
 class Product {
-  constructor(props) {
-    this.title = props.title
+  constructor(product) {
+    this.product = product
   }
 
   static fetchAll(cb) {
@@ -18,7 +18,7 @@ class Product {
   saveToFile() {
     getProductsFromFile((productList) => {
       const newList = [...productList]
-      newList.push(this)
+      newList.push(this.product)
       fs.writeFile(productFilePath, JSON.stringify(newList), err => {
         if (err) {
           console.error(err)

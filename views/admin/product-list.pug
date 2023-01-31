@@ -1,0 +1,27 @@
+extends ../layouts/shop/main
+
+block styles
+  link(rel="stylesheet", href="/css/shop.css")
+block content
+  h1 Admin Product-list
+  if productList.length > 0
+    div.product-list
+      each product in productList
+        article.card.product-item
+          header.card-header
+            h1.product-title #{product.title}
+          div.card__image
+            img(src=product.imageUrl, alt="product-image")
+          div.card__content
+            h2.product__price #{product.price}$
+            p.product__description #{product.description}
+          div.card__actions
+            a.btn(href="/admin/edit-product") Edit
+            form(action="/admin/product" method="DELETE")
+              button.btn(type="submit") Delete
+
+  else
+    h1 No products
+
+
+
