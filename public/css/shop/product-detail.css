@@ -1,0 +1,30 @@
+.product {
+    display: grid;
+    grid-template-columns: max-content 50% auto;
+    grid-template-rows: auto;
+}
+
+.product__image {
+    max-height: 60vh;
+}
+
+.product__description {
+    font-size: 1.3rem;
+}
+
+.product__price {
+    margin-top: 1rem;
+    font-size: 1.3rem;
+}
+
+.product__data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.product__button {
+    margin-top: 2rem;
+    min-width: 15rem;
+    padding: 0.5rem;
+}

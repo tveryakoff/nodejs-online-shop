@@ -1,22 +1,21 @@
 extends ../layouts/shop/main
 
 block styles
-  link(rel="stylesheet", href="/css/shop.css")
+  link(rel="stylesheet", href="/css/shop/product-list.css")
 block content
   if productList.length > 0
     div.product-list
       each product in productList
-        article.card.product-item
-          header.card-header
-            h1.product-title #{product.title}
-          div.card__image
-            img(src=product.imageUrl, alt="product-image")
-          div.card__content
-            h2.product__price #{product.price}$
-            p.product__description #{product.description}
-          div.card__actions
-            form(action='/add-to-cart', method='POST')
-              button.btn(type="submit") Add to Cart
+        a.product-item(href=`/product-detail/${product.id}`)
+          div.product__body
+            h1.product-item__header #{product.title}
+            .product__inner
+              .product__image-wrapper
+                img.product__image(src=product.imageUrl || 'https://sacajaweaaudubon.org/wp-content/uploads/2020/06/a-lot-of-books-clipart-6.png', alt="product-image")
+              p.product__description #{product.description}
+              h3.product__price #{product.price}$
+          form.card__actions(action='/cart', method='POST')
+            button.btn-action.product__add-to-cart(type="submit") Add to Cart
   else
     h1 No products
 

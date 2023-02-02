@@ -1,0 +1,15 @@
+extends ../layouts/shop/main
+
+block styles
+  link(rel="stylesheet", href="/css/shop/product-detail.css")
+block content
+  h1.product__header #{product.title}
+  .product
+    img.product__image(src=product.imageUrl || 'https://sacajaweaaudubon.org/wp-content/uploads/2020/06/a-lot-of-books-clipart-6.png', alt=product.title)
+    .product__data
+      p.product__description #{product.description}
+      p.product__price Price: #{product.price}$
+      form(action=`/cart`, method="POST")
+        input(name="productId", value=product.id, type="hidden")
+        button.btn-action.product__button(type="submit") Add to Cart
+

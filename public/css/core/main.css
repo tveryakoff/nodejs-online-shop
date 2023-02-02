@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+a {
+    text-decoration: none;
+    color: black;
+}
+
 .wrapper {
     background-color: #f5f7f8;
     padding: 2rem;
@@ -38,15 +43,28 @@
 }
 
 .main-header__link-active {
-    color: purple;
+    color: #500cde;
 }
 
 .main-header__link:hover {
-    color: #1389b6;
+    color: #9444f6;
 }
 
 .main-section {
     display: flex;
     width: 100%;
     padding: 2rem;
+}
+
+.btn-action {
+    border: 2px solid #9444f6;
+    outline: none;
+    background-color: white;
+    padding: 0.3rem 0.5rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.btn-action:hover {
+    background-color: #775def;
 }

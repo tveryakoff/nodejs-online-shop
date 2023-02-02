@@ -2,17 +2,26 @@ const fs = require('fs')
 const {getProductsFromFile} = require("../utils/file");
 const path = require("path");
 const rootDir = require("../constants/rootDir");
+const uniqueId = require("uniqid");
 
 const productFilePath = path.join(rootDir, 'data', 'products.json')
 
 
 class Product {
   constructor(product) {
-    this.product = product
+    const id = uniqueId()
+    this.product = {...product, id}
   }
 
   static fetchAll(cb) {
     getProductsFromFile(cb)
+  }
+
+  static getProductById(productId, cb) {
+    getProductsFromFile(productList => {
+      const product = productList.find(p => p.id === productId)
+      cb({...product, })
+    })
   }
 
   saveToFile() {
