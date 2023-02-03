@@ -6,7 +6,7 @@ const getAddProduct = (req, res, next) => {
   })
 }
 
-const createProduct = (req, res) => {
+const createProduct = async (req, res) => {
   const productData = {
     title: req.body.title,
     imageUrl: req.body.imageUrl,
@@ -15,16 +15,19 @@ const createProduct = (req, res) => {
 
   }
   const product = new Product(productData)
-  product.saveToFile()
+  await product.saveToFile()
   res.redirect('/product-list');
 }
 
-const getProducts = (req, res) => {
-  Product.fetchAll((productList) => res.render('admin/product-list.pug', {
+const getProducts = async (req, res) => {
+  const productList = Product.fetchAll()
+
+  return res.render('admin/product-list.pug', {
     productList,
     pageTitle: 'Admin-products',
     path: '/admin/product-list'
-  }))
+  })
+
 }
 
 module.exports = {

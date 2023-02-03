@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs/promises')
 const {getProductsFromFile} = require("../utils/file");
 const path = require("path");
 const rootDir = require("../constants/rootDir");
@@ -13,27 +13,20 @@ class Product {
     this.product = {...product, id}
   }
 
-  static fetchAll(cb) {
-    getProductsFromFile(cb)
+  static async fetchAll() {
+    return await getProductsFromFile()
   }
 
-  static getProductById(productId, cb) {
-    getProductsFromFile(productList => {
-      const product = productList.find(p => p.id === productId)
-      cb({...product, })
-    })
+  static async getProductById(productId) {
+    const productList = await getProductsFromFile()
+    return productList.find(p => p.id === productId)
   }
 
-  saveToFile() {
-    getProductsFromFile((productList) => {
-      const newList = [...productList]
-      newList.push(this.product)
-      fs.writeFile(productFilePath, JSON.stringify(newList), err => {
-        if (err) {
-          console.error(err)
-        }
-      })
-    })
+  async saveToFile() {
+    const productList = await getProductsFromFile()
+    const newList = [...productList]
+    newList.push(this.product)
+    return await fs.writeFile(productFilePath, JSON.stringify(newList))
   }
 
 }

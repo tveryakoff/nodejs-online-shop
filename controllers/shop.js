@@ -1,32 +1,36 @@
 const {Product} = require('../models/product')
+const {Cart} = require('../models/Cart')
 
-const getIndex = (req, res) => {
-  Product.fetchAll((productList) => res.render('shop/index.pug', {
+const getIndex = async (req, res) => {
+  const productList = await Product.fetchAll()
+
+  res.render('shop/index.pug', {
     productList, pageTitle: 'Welcome', path: '/'
-  }))
-}
-
-const getProducts = (req, res, next) => {
-  Product.fetchAll((productList) => res.render('shop/product-list.pug', {
-    productList, pageTitle: 'product-list', path: '/product-list'
-  }))
-}
-
-const getProductById = (req, res, next) => {
-  const productId = req.params.productId
-  Product.getProductById(productId, (product) => {
-    res.render('shop/product-detail', {pageTitle: product.name || 'Product Detail', path: '/product-list', product})
   })
+}
+
+const getProducts = async (req, res, next) => {
+  const productList = await Product.fetchAll()
+  res.render('shop/product-list.pug', {
+    productList, pageTitle: 'product-list', path: '/product-list'
+  })
+}
+
+const getProductById = async (req, res, next) => {
+  const productId = req.params.productId
+  const product = await Product.getProductById(productId)
+  res.render('shop/product-detail', {pageTitle: product.name || 'Product Detail', path: '/product-list', product})
 }
 
 const getCart = (req, res, next) => {
   res.render('shop/cart', {pageTitle: 'Your Cart', path: '/cart'})
 }
 
-const postCart = (req, res) => {
+const postCart = async (req, res) => {
   const prodId = req.body.productId
-  console.log('prodId', prodId)
-  res.redirect('/cart')
+  const product = await Product.getProductById(prodId)
+  await Cart.addProduct(product)
+  res.redirect('/product-list')
 }
 
 const getOrderList = (req, res) => {
@@ -38,5 +42,5 @@ const getCheckout = (req, res) => {
 }
 
 module.exports = {
-  getIndex, getProducts, getProductById, getCart,postCart, getCheckout, getOrderList
+  getIndex, getProducts, getProductById, getCart, postCart, getCheckout, getOrderList
 }
