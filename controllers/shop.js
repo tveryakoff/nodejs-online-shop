@@ -22,8 +22,10 @@ const getProductById = async (req, res, next) => {
   res.render('shop/product-detail', {pageTitle: product.name || 'Product Detail', path: '/product-list', product})
 }
 
-const getCart = (req, res, next) => {
-  res.render('shop/cart', {pageTitle: 'Your Cart', path: '/cart'})
+const getCart = async (req, res, next) => {
+  const productList = await Cart.getProducts()
+  const cart = await Cart.getCart()
+  return res.render('shop/cart', {pageTitle: 'Your Cart', path: '/cart', productList, cart})
 }
 
 const postCart = async (req, res) => {
@@ -31,6 +33,26 @@ const postCart = async (req, res) => {
   const product = await Product.getProductById(prodId)
   await Cart.addProduct(product)
   res.redirect('/product-list')
+}
+
+const addProductToCart = async (req, res) => {
+  const productId = req.body.productId
+  if (!productId) {
+    return
+  }
+  const product = await Product.getProductById(productId)
+  await Cart.addProduct(product)
+  return res.redirect('/cart')
+}
+
+const deleteProductFromCart = async (req, res) => {
+  const productId = req.body.productId
+  if (!productId) {
+    return
+  }
+
+  await Cart.removeOneProduct(productId)
+  return res.redirect('/cart')
 }
 
 const getOrderList = (req, res) => {
@@ -42,5 +64,5 @@ const getCheckout = (req, res) => {
 }
 
 module.exports = {
-  getIndex, getProducts, getProductById, getCart, postCart, getCheckout, getOrderList
+  getIndex, getProducts, getProductById, getCart, postCart, getCheckout, getOrderList, addProductToCart, deleteProductFromCart
 }

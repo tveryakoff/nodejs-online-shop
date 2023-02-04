@@ -1,0 +1,23 @@
+.cart-product {
+    display: flex;
+    align-items: center;
+}
+
+.cart-buttons {
+    margin-left: 2rem;
+    display: flex;
+    align-items: center;
+    border: 2px solid #9a34f3;
+}
+
+.cart__action-button {
+    margin: 0 0.5rem;
+    outline: none;
+    background-color: unset;
+    font-size: 1.2rem;
+    border: none;
+}
+
+.cart-price__wrapper {
+    margin-top: 2rem;
+}

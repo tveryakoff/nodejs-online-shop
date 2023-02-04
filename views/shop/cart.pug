@@ -1,7 +1,22 @@
 extends ../layouts/shop/main
 
 block styles
-  link(rel="stylesheet", href="/css/shop.css")
+  link(rel="stylesheet", href="/css/shop/cart.css")
 block content
-  h1 Your cart
+  if productList && productList.length > 0
+    each product in productList
+      .cart-product
+        .span #{product.title}
+        .cart-buttons
+          form(action="/cart-delete-product", method="POST")
+            input(type="hidden", value=product.id, name="productId")
+            button.cart__action-button(type="submit") -
+          span.cart-product__count #{product.count}
+          form(action="/cart-add-product", method="POST")
+            input(type="hidden", value=product.id, name="productId")
+            button.cart__action-button(type="submit") +
+    .cart-price__wrapper
+      span Total: #{cart.totalPrice}$
+
+
 

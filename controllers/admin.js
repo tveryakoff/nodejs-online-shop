@@ -1,4 +1,5 @@
 const {Product} = require('../models/product')
+const {Cart} = require('../models/Cart')
 
 const createProduct = async (req, res) => {
   const productData = {
@@ -25,6 +26,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   const id = req.body.productId
   await Product.deleteProductById(id)
+  await Cart.removeProduct(id)
 
   return res.redirect('/admin/product-list')
 }
