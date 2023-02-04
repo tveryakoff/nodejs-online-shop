@@ -1,0 +1,8 @@
+.buttons {
+    display: flex;
+}
+
+.admin__delete-button {
+    margin-left: 2rem;
+}
+

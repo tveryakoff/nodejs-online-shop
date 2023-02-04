@@ -1,0 +1,23 @@
+extends ../layouts/shop/main
+
+block styles
+  link(rel="stylesheet", href="/css/add-product.css")
+block content
+  section.main-section
+    form.add-product-form(action=`${isEdit ? "/admin/product-edit" : '/admin/product-add'}`, method="POST")
+      if (isEdit)
+        input.add-product-form__input(type="hidden", name="id", value=product.id)
+      .input-wrapper
+        label.input-label(for="title") Name
+        input.add-product-form__input(id="title", type="text", name="title", value=isEdit && product.title)
+      .input-wrapper
+        label.input-label(for="image") Image
+        input.add-product-form__input(id="image", type="text", name="imageUrl" value=isEdit && product.imageUrl)
+      .input-wrapper
+        label.input-label(for="image") Price
+        input.add-product-form__input(id="price", type="number", name="price", step="0.01" value=isEdit && product.price)
+      .input-wrapper
+        label.input-label(for="image") Description
+        textarea.add-product-form__input.add-product-form__textarea(id="description", rows="5", name="description" ) #{isEdit && product.description}
+      button.add-product-form__button(type="submit") #{isEdit ? 'Edit' : 'Create'}
+

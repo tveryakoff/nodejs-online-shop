@@ -1,27 +1,28 @@
 extends ../layouts/shop/main
 
 block styles
-  link(rel="stylesheet", href="/css/shop.css")
+  link(rel="stylesheet", href="/css/shop/product-list.css")
+  link(rel="stylesheet", href="/css/admin/product-list.css")
 block content
-  h1 Admin Product-list
   if productList.length > 0
     div.product-list
       each product in productList
-        article.card.product-item
-          header.card-header
-            h1.product-title #{product.title}
-          div.card__image
-            img(src=product.imageUrl, alt="product-image")
-          div.card__content
-            h2.product__price #{product.price}$
-            p.product__description #{product.description}
+        a.product-item(href=`/product-detail/${product.id}`)
+          div.product__body
+            h1.product-item__header #{product.title}
+            .product__inner
+              .product__image-wrapper
+                img.product__image(src=product.imageUrl || 'https://sacajaweaaudubon.org/wp-content/uploads/2020/06/a-lot-of-books-clipart-6.png', alt="product-image")
+              p.product__description #{product.description}
+              h3.product__price #{product.price}$
           div.card__actions
-            a.btn(href="/admin/edit-product") Edit
-            form(action="/admin/product" method="DELETE")
-              button.btn(type="submit") Delete
+            .buttons
+              form(action=`/admin/product-edit/${product.id}`, method="GET")
+                button.btn-action.product__add-to-cart(href=`admin/product-edit/${product.id}`) Edit
+              form(action=`/admin/product-delete`, method="POST")
+                input(type="hidden", name="productId", value=product.id)
+                button.btn-action-danger.product__add-to-cart.admin__delete-button(type="submit") Delete
 
   else
     h1 No products
-
-
 
