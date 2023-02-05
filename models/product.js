@@ -4,7 +4,7 @@ const path = require("path");
 const rootDir = require("../constants/rootDir");
 const uniqueId = require("uniqid");
 
-const productFilePath = path.join(rootDir, 'data', 'products.json')
+const db = require('../utils/database')
 
 
 class Product {
@@ -14,7 +14,8 @@ class Product {
   }
 
   static async fetchAll() {
-    return await getProductsFromFile()
+    const [rows, meta] = await  db.execute('SELECT * FROM product')
+    return rows
   }
 
   static async getProductById(productId) {
