@@ -10,7 +10,12 @@ const db = require('../utils/database')
 class Product {
   constructor(product) {
     const id = uniqueId()
-    this.product = {...product, id}
+    this.product = {
+      title: product.title || null,
+      price: product.price || null,
+      description: product.description || null,
+      imageUrl: product.imageUrl || null
+    }
   }
 
   static async fetchAll() {
@@ -19,8 +24,9 @@ class Product {
   }
 
   static async getProductById(productId) {
-    const productList = await getProductsFromFile()
-    return productList.find(p => p.id === productId)
+    const [rows, meta] = await db.execute('SELECT * FROM product WHERE product.id = ?', [productId])
+
+    return rows[0]
   }
 
   static async updateProduct(product) {
@@ -47,6 +53,12 @@ class Product {
     const newList = [...productList]
     newList.push(this.product)
     return await saveProductListToFile(newList)
+  }
+
+  async save() {
+    return db.execute('INSERT INTO product (title, price, description, imageUrl) VALUES(?,?,?,?)', [
+      this.product.title, this.product.price, this.product.description, this.product.imageUrl
+    ])
   }
 
 }

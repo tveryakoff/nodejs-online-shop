@@ -19,7 +19,8 @@ const getProducts = async (req, res, next) => {
 const getProductById = async (req, res, next) => {
   const productId = req.params.productId
   const product = await Product.getProductById(productId)
-  res.render('shop/product-detail', {pageTitle: product.name || 'Product Detail', path: '/product-list', product})
+  console.log('product', product)
+  return res.render('shop/product-detail', {pageTitle: product?.title || 'Product Detail', path: '/product-list', product})
 }
 
 const getCart = async (req, res, next) => {

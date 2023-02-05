@@ -6,7 +6,7 @@ const createProduct = async (req, res) => {
     title: req.body.title, imageUrl: req.body.imageUrl, price: req.body.price, description: req.body.description
   }
   const product = new Product(productData)
-  await product.saveToFile()
+  await product.save()
   return res.redirect('/admin/product-list');
 }
 
@@ -42,9 +42,9 @@ const getProducts = async (req, res) => {
 
 const getProductForm = async (req, res) => {
   const productId = req.params.productId
-  const product = await Product.getProductById(productId)
 
   if (productId) {
+    const product = await Product.getProductById(productId)
     return res.render('admin/product-form.pug', {
       pageTitle: 'Edit product', path: '/admin/add-product', product, isEdit: true
     })
