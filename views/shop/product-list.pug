@@ -14,7 +14,7 @@ block content
                 img.product__image(src=product.imageUrl || 'https://sacajaweaaudubon.org/wp-content/uploads/2020/06/a-lot-of-books-clipart-6.png', alt="product-image")
               p.product__description #{product.description}
               h3.product__price #{product.price}$
-          form.card__actions(action='/cart', method='POST')
+          form.card__actions(action='/cart-add-product', method='POST')
             input(name="productId" type="hidden", value=product.id)
             button.btn-action.product__add-to-cart(type="submit") Add to Cart
   else

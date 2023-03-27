@@ -11,12 +11,15 @@ block content
           form(action="/cart-delete-product", method="POST")
             input(type="hidden", value=product.id, name="productId")
             button.cart__action-button(type="submit") -
-          span.cart-product__count #{product.count}
+          span.cart-product__count #{product.cartItem.count}
           form(action="/cart-add-product", method="POST")
             input(type="hidden", value=product.id, name="productId")
             button.cart__action-button(type="submit") +
     .cart-price__wrapper
       span Total: #{cart.totalPrice}$
+      form(action="/cart-create-order", method="POST")
+       input(type="hidden", name="cartId" value=cart.id)
+       button.btn-action(type="submit") Order Now !
 
 
 

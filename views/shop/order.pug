@@ -1,0 +1,12 @@
+extends ../layouts/shop/main
+
+block content
+  h1 Order
+  if order.products && order.products.length
+    each product in order.products
+      .order-product
+        .span #{product.title}
+        .span #{product.price}
+        .span #{product.orderItem.count}
+  else
+    h2 No products in current order
