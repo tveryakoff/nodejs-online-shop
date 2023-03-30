@@ -4,10 +4,10 @@ const auth = async (req, res, next) => {
   if (req.user) {
     next()
   }
-  const user = await User.findByPk(1)
+  const user = await User.findById('6422fe0ed5fb510597f8620b')
 
   if (user) {
-    req.user = user
+    req.user = new User(user)
   }
 
   next()

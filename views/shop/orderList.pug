@@ -1,6 +1,16 @@
 extends ../layouts/shop/main
 
 block styles
-  link(rel="stylesheet", href="/css/shop.css")
+  link(rel="stylesheet", href="/css/shop/order-list.css")
 block content
-  h1 Order List
+  if orderList.length > 0
+    each order in orderList
+      div.order-item
+        a(href=`/order/${order._id}`)
+          h2.order-item-header Order - # #{order._id}
+        if order.items.length > 0
+          each orderItem in order.items
+            a.order-item__wrapper(href=`product-detail/${orderItem._id}`)
+              span.order-item__name #{orderItem.title} (#{orderItem.count})
+  else
+    h1 No orders yet

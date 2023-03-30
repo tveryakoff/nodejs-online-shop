@@ -4,6 +4,7 @@ const path = require('path')
 const rootDir = require('./constants/rootDir')
 const errorController = require('./controllers/error')
 const initDb = require('./models/initDb')
+const {connectMongoDb} = require('./utils/mongo-database')
 const auth = require('./middlewares/auth')
 
 const app = express()
@@ -20,12 +21,12 @@ app.use(express.static(path.join(rootDir, 'public')))
 app.use(auth)
 
 app.use('/admin', adminRouts)
-app.use('/users', userRouts)
+// app.use('/users', userRouts)
 app.use(shopRoutes)
 
 app.use(errorController.get404)
 
-initDb().then(() => {
+connectMongoDb().then(() => {
   app.listen(3000)
 })
 

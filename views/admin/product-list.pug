@@ -7,7 +7,7 @@ block content
   if productList.length > 0
     div.product-list
       each product in productList
-        a.product-item(href=`/product-detail/${product.id}`)
+        a.product-item(href=`/product-detail/${product._id}`)
           div.product__body
             h1.product-item__header #{product.title}
             .product__inner
@@ -17,10 +17,10 @@ block content
               h3.product__price #{product.price}$
           div.card__actions
             .buttons
-              form(action=`/admin/product-edit/${product.id}`, method="GET")
-                button.btn-action.product__add-to-cart(href=`admin/product-edit/${product.id}`) Edit
+              form(action=`/admin/product-edit/${product._id}`, method="GET")
+                button.btn-action.product__add-to-cart(href=`admin/product-edit/${product._id}`) Edit
               form(action=`/admin/product-delete`, method="POST")
-                input(type="hidden", name="productId", value=product.id)
+                input(type="hidden", name="productId", value=product._id)
                 button.btn-action-danger.product__add-to-cart.admin__delete-button(type="submit") Delete
 
   else

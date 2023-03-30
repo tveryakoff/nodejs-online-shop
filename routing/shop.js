@@ -18,20 +18,20 @@ shopRoutes.get('/', getIndex)
 shopRoutes.get('/product-list', getProducts)
 
 shopRoutes.get('/product-detail/:productId', getProductById)
-
+//
 shopRoutes.get('/cart', getCart)
-
+//
 shopRoutes.post('/cart-add-product', addProductToCart)
-
+//
 shopRoutes.post('/cart-create-order', createOrder)
-
-shopRoutes.get('/order', getUserOrder)
-
+//
+shopRoutes.get('/order/:orderId', getUserOrder)
+//
 shopRoutes.post('/cart-delete-product', deleteProductFromCart)
-
+//
 shopRoutes.get('/order-list', getOrderList)
-
-shopRoutes.get('/checkout', getCheckout)
+//
+// shopRoutes.get('/checkout', getCheckout)
 
 module.exports = {
   shopRoutes

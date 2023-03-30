@@ -1,5 +1,5 @@
 const SequelizeLib = require("sequelize")
-const sequelize = require('../utils/database')
+const sequelize = require('../utils/sql-database')
 
 class Order extends SequelizeLib.Model {
 

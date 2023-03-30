@@ -1,32 +1,24 @@
 const Product = require('../models/product')
-const {Cart} = require('../models/Cart')
 
 const createProduct = async (req, res) => {
   const productData = {
     title: req.body.title, imageUrl: req.body.imageUrl, price: req.body.price, description: req.body.description
   }
 
-  const {user} = req
+  const product = new Product(productData, req?.user?._id)
 
-  await user.createProduct(productData)
+  const saveRes = await product.save()
 
-  // create new product and save to DB right away
-  // const result = await Product.create(productData)
   return res.redirect('/admin/product-list');
 }
 
 const updateProduct = async (req, res) => {
   const productData = {
-    title: req.body.title, imageUrl: req.body.imageUrl, price: req.body.price, description: req.body.description
+    title: req.body.title, imageUrl: req.body.imageUrl, price: req.body.price, description: req.body.description, _id: req.body._id
   }
 
   try {
-    const product = await req.user.getProducts({where: {id: req.body.productId}})?.[0]
-    product.title = productData.title
-    product.imageUrl = productData.imageUrl
-    product.price = productData.price
-    product.description = productData.description
-
+    const product = new Product(productData)
     await product.save()
 
     return res.redirect('/admin/product-list')
@@ -39,36 +31,26 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   const id = req.body.productId
-  const product = await Product.findByPk(id)
-
-  if (product) {
-    await product.destroy()
-  }
+  await Product.deleteById(id)
 
   return res.redirect('/admin/product-list')
 }
 
 const getProducts = async (req, res) => {
-  const {user} = req
-  let productList = []
-
-  if (user) {
-    productList = await user.getProducts()
-  }
+ const productList = await Product.fetchAll()
 
   return res.render('admin/product-list.pug', {
     productList, pageTitle: 'Admin-products', path: '/admin/product-list'
   })
-
 }
 
 const getProductForm = async (req, res) => {
   const productId = req.params.productId
 
   if (productId) {
-    const productList = await req.user.getProducts({where: {id: productId}})
+    const product = await Product.findById(productId)
     return res.render('admin/product-form.pug', {
-      pageTitle: 'Edit product', path: '/admin/add-product', product: productList[0], isEdit: true
+      pageTitle: 'Edit product', path: '/admin/add-product', product, isEdit: true
     })
   }
 
