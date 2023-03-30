@@ -6,14 +6,14 @@ block content
   if productList && productList.length > 0
     each product in productList
       .cart-product
-        .span #{product.title}
+        .span #{product.cartProductId.title}
         .cart-buttons
           form(action="/cart-delete-product", method="POST")
-            input(type="hidden", value=product._id, name="productId")
+            input(type="hidden", value=product.cartProductId._id, name="productId")
             button.cart__action-button(type="submit") -
           span.cart-product__count #{product.count}
           form(action="/cart-add-product", method="POST")
-            input(type="hidden", value=product._id, name="productId")
+            input(type="hidden", value=product.cartProductId._id, name="productId")
             button.cart__action-button(type="submit") +
     .cart-price__wrapper
       span Total: #{totalPrice}$

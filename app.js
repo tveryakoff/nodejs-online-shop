@@ -1,5 +1,5 @@
 const express = require('express')
-const {shopRoutes, adminRouts, userRouts} = require('./routing')
+const {shopRoutes, adminRouts} = require('./routing')
 const path = require('path')
 const rootDir = require('./constants/rootDir')
 const errorController = require('./controllers/error')

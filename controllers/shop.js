@@ -1,9 +1,9 @@
-const Product = require('../models/product')
+const {Product} = require('../models/product')
 const {Cart} = require('../models/Cart')
 const Order =require('../models/orders')
 
 const getIndex = async (req, res) => {
-  const productList = await Product.fetchAll()
+  const productList = await Product.find()
 
   res.render('shop/index.pug', {
     productList, pageTitle: 'Welcome', path: '/'
@@ -11,7 +11,7 @@ const getIndex = async (req, res) => {
 }
 
 const getProducts = async (req, res, next) => {
-  const productList = await Product.fetchAll()
+  const productList = await Product.find()
   res.render('shop/product-list.pug', {
     productList, pageTitle: 'product-list', path: '/product-list'
   })
@@ -26,8 +26,8 @@ const getProductById = async (req, res, next) => {
 }
 
 const getCart = async (req, res, next) => {
-  const cart = await req.user.getCart()
-  return res.render('shop/cart', {pageTitle: 'Your Cart', path: '/cart', productList: cart.productList, totalPrice: cart.totalPrice, userId: req.user._id})
+  await req.user.populate('cart.items.cartProductId')
+  return res.render('shop/cart', {pageTitle: 'Your Cart', path: '/cart', productList: req.user.cart.items, totalPrice: req.user.totalPrice, userId: req.user._id})
 }
 
 const addProductToCart = async (req, res) => {

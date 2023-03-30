@@ -1,13 +1,13 @@
-const Product = require('../models/product')
+const {Product} = require('../models/product')
 
 const createProduct = async (req, res) => {
   const productData = {
-    title: req.body.title, imageUrl: req.body.imageUrl, price: req.body.price, description: req.body.description
+    title: req.body.title, imageUrl: req.body.imageUrl, price: req.body.price, description: req.body.description, userId: req?.user?._id
   }
 
-  const product = new Product(productData, req?.user?._id)
+  const product = new Product(productData)
 
-  const saveRes = await product.save()
+  await product.save()
 
   return res.redirect('/admin/product-list');
 }
@@ -37,7 +37,7 @@ const deleteProduct = async (req, res) => {
 }
 
 const getProducts = async (req, res) => {
- const productList = await Product.fetchAll()
+ const productList = await Product.find()
 
   return res.render('admin/product-list.pug', {
     productList, pageTitle: 'Admin-products', path: '/admin/product-list'
