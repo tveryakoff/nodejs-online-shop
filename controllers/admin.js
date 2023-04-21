@@ -18,8 +18,7 @@ const updateProduct = async (req, res) => {
   }
 
   try {
-    const product = new Product(productData)
-    await product.save()
+    await Product.findOneAndUpdate({_id: req.body._id}, productData)
 
     return res.redirect('/admin/product-list')
 
@@ -31,7 +30,7 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   const id = req.body.productId
-  await Product.deleteById(id)
+  await Product.deleteOne({_id: id})
 
   return res.redirect('/admin/product-list')
 }

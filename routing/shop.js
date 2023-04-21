@@ -31,7 +31,7 @@ shopRoutes.post('/cart-delete-product', deleteProductFromCart)
 //
 shopRoutes.get('/order-list', getOrderList)
 //
-// shopRoutes.get('/checkout', getCheckout)
+shopRoutes.get('/checkout', getCheckout)
 
 module.exports = {
   shopRoutes

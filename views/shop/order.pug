@@ -3,11 +3,11 @@ extends ../layouts/shop/main
 block content
   h1 Order
   h2 Total price: #{order.totalPrice}$
-  if order.items && order.items.length
-    each product in order.items
+  if order.products && order.products.length
+    each product in order.products
       .order-product
-        .span #{product.title}
-        .span #{product.price}
+        .span #{product.productData.title}
+        .span #{product.productData.price}
         .span #{product.count}
   else
     h2 No products in current order

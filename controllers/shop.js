@@ -1,5 +1,4 @@
 const {Product} = require('../models/product')
-const {Cart} = require('../models/Cart')
 const Order =require('../models/orders')
 
 const getIndex = async (req, res) => {
@@ -35,16 +34,23 @@ const addProductToCart = async (req, res) => {
   if (!productId) {
     return
   }
-
-
   await req.user.addProductToCart(productId)
-
   return res.redirect('/cart')
 }
 
 const createOrder = async (req, res) => {
-  const orderId = await req.user.createOrder()
-  return res.redirect(`/order/${orderId}`)
+  await req.user.populate('cart.items.cartProductId')
+  await req.user.populate('cart.totalPrice')
+  const order = new Order({
+    user: {
+      name: req.user.name,
+      userId: req.user?._id,
+    },
+    totalPrice: req.user.cart.totalPrice,
+    products: req.user.cart.items.map(item => ({count: item.count, productData: {title: item.cartProductId.title, price: item.cartProductId.price}}))
+  })
+  await order.save()
+  return res.redirect(`/order/${order._id}`)
 }
 
 const getUserOrder = async (req, res) => {
@@ -54,7 +60,7 @@ const getUserOrder = async (req, res) => {
       return res.render('errors/404')
     }
 
-    const order = await Order.fetchById(orderId)
+    const order = await Order.findById(orderId)
     return res.render('shop/order.pug', {pageTitle: 'order', order})
   } catch (e) {
     console.error(e)

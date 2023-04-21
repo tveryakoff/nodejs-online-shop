@@ -1,35 +1,27 @@
-const  {getMongoDb} = require('../utils/mongo-database')
-const {ObjectId} = require('mongodb')
+const {Schema, model} = require('mongoose')
+const {orderCollection, userCollection} = require('./constants')
 
-const TABLE_NAME = 'orders'
-
-class Order {
-  constructor({items, totalPrice, userId}) {
-    this.items = items
-    this.totalPrice = totalPrice
-    this.userId = userId
-  }
-
-  async save() {
-    const db = getMongoDb()
-    if (!this.items?.length) {
-      return
+const orderSchema = new Schema({
+  products: [{
+    productData: {type: Object, required: true},
+    count: {type: Number, required: true}
+  }],
+  totalPrice: {
+    type: Number
+  },
+  user: {
+    name: {
+      type: String,
+      required: true
+    },
+    userId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: userCollection
     }
-
-    return db.collection(TABLE_NAME).insertOne(this)
-
   }
+})
 
-  static async fetchAll(filter) {
-    const db = getMongoDb()
-    return db.collection(TABLE_NAME).find(filter).toArray()
-  }
+const orderModel = model(orderCollection, orderSchema)
 
-  static fetchById(orderId) {
-    const db = getMongoDb()
-    return db.collection(TABLE_NAME).findOne({_id: new ObjectId(orderId)})
-  }
-
-}
-
-module.exports = Order
+module.exports = orderModel
