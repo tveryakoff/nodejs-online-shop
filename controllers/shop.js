@@ -47,9 +47,10 @@ const createOrder = async (req, res) => {
       userId: req.user?._id,
     },
     totalPrice: req.user.cart.totalPrice,
-    products: req.user.cart.items.map(item => ({count: item.count, productData: {title: item.cartProductId.title, price: item.cartProductId.price}}))
+    products: req.user.cart.items.map(item => ({count: item.count, productData: {title: item.cartProductId.title, price: item.cartProductId.price, _id: item.cartProductId._id}}))
   })
   await order.save()
+  await req.user.clearCart()
   return res.redirect(`/order/${order._id}`)
 }
 
@@ -79,7 +80,7 @@ const deleteProductFromCart = async (req, res) => {
 }
 
 const getOrderList = async (req, res) => {
-  const orderList = await req.user.getOrders()
+  const orderList  = await Order.find({"user.userId": req.user._id})
   res.render('shop/orderList.pug', {pageTitle: 'Your orders', path: '/order-list', orderList})
 }
 

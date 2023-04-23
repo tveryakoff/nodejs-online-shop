@@ -1,4 +1,4 @@
-.add-product-form {
+.form {
     width: 30rem;
     max-width: 90%;
     margin: 0 auto;
@@ -17,7 +17,7 @@
     min-width: 20%;
 }
 
-.add-product-form__input {
+.form__input {
     padding: 0.5rem;
     width: 100%;
     border: 1px solid #e0dddd;
@@ -25,16 +25,16 @@
     height: 2rem;
 }
 
-.add-product-form__input:focus {
+.form__input:focus {
     border: 2px solid #1389b6;
     outline: none;
 }
 
-.add-product-form__textarea {
+.form__textarea {
     height: auto!important;
 }
 
-.add-product-form__button {
+.form__button {
     margin-top: 1rem;
     height: 2rem;
     background-color:  #1389b6;
@@ -47,6 +47,6 @@
     align-self: end;
 }
 
-.add-product-form__button:hover {
+.form__button:hover {
     background-color: #219fc5
 }

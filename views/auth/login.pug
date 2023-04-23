@@ -1,0 +1,16 @@
+extends ../layouts/shop/main
+
+block styles
+  link(rel="stylesheet", href="/css/core/form.css")
+
+block content
+  section.main-section
+    form.form(action='/login', method="POST")
+      .input-wrapper
+        label.input-label(for="email") Email
+        input.form__input(id="email", type="email", name="email")
+      .input-wrapper
+        label.input-label(for="password") Password
+        input.form__input(id="password", type="password", name="password" )
+      button.form__button(type="submit") Login
+

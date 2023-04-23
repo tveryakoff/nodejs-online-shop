@@ -79,6 +79,11 @@ userSchema.methods.removeProductFromCart = async function removeProductFromCart(
     return this.save()
   }
 
+userSchema.methods.clearCart = function () {
+  this.cart = {items: [], totalPrice: 0}
+  this.save()
+  }
+
 // class User {
 //   constructor({_id, name, email, cart}) {
 //     this.name = name;

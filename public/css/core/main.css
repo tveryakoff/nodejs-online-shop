@@ -26,6 +26,8 @@ a {
 
 .main-header__nav {
     height: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 
 .main-header__list {

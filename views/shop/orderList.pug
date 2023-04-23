@@ -8,9 +8,9 @@ block content
       div.order-item
         a(href=`/order/${order._id}`)
           h2.order-item-header Order - # #{order._id}
-        if order.items.length > 0
-          each orderItem in order.items
-            a.order-item__wrapper(href=`product-detail/${orderItem._id}`)
-              span.order-item__name #{orderItem.title} (#{orderItem.count})
+        if order.products.length > 0
+          each orderItem in order.products
+            a.order-item__wrapper(href=`product-detail/${orderItem.productData._id}`)
+              span.order-item__name #{orderItem.productData.title} (#{orderItem.count})
   else
     h1 No orders yet
