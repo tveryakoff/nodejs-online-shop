@@ -5,6 +5,7 @@ block styles
 block content
   section.main-section
     form.form(action=`${isEdit ? "/admin/product-edit" : '/admin/product-add'}`, method="POST")
+      input(type="hidden" name="_csrf" value=csrfToken)
       if (isEdit)
         input.form__input(type="hidden", name="_id", value=product._id)
       .input-wrapper

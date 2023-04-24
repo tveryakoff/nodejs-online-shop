@@ -11,6 +11,7 @@ block content
       p.product__price Price: #{product.price}$
       if isLoggedIn
         form(action=`/cart-add-product`, method="POST")
+          input(type="hidden" name="_csrf" value=csrfToken)
           input(name="productId", value=product._id, type="hidden")
           button.btn-action.product__button(type="submit") Add to Cart
 

@@ -6,6 +6,7 @@ block styles
 block content
   section.main-section
     form.form(action='/login', method="POST")
+      input(type="hidden" name="_csrf" value=csrfToken)
       .input-wrapper
         label.input-label(for="email") Email
         input.form__input(id="email", type="email", name="email")

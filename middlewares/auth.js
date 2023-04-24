@@ -21,12 +21,13 @@ const addData = async (req,res,next) => {
   if (!userObj) {
     res.locals.isLoggedIn = false
     req.user = null
-    return next()
   }
-  const user = await User.findById(userObj._id)
-  req.user = user
-
-  res.locals.isLoggedIn = !!userObj
+  else {
+    const user = await User.findById(userObj._id)
+    req.user = user
+    res.locals.isLoggedIn = !!userObj
+  }
+  res.locals.csrfToken = req.csrfToken()
 
   return next()
 }

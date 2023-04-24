@@ -33,6 +33,7 @@ html(lang="en")
           if isLoggedIn
             li
               form(action='/logout', method="POST")
+                input(type="hidden" name="_csrf" value=csrfToken)
                 button.main-header__button(type="submit", class=(path === '/login' ? 'main-header__link-active' : '')) Logout
 
 

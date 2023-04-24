@@ -16,6 +16,7 @@ block content
               h3.product__price #{product.price}$
           if isLoggedIn
             form.card__actions(action='/cart-add-product', method='POST')
+              input(type="hidden" name="_csrf" value=csrfToken)
               input(name="productId" type="hidden", value=product._id)
               button.btn-action.product__add-to-cart(type="submit") Add to Cart
   else

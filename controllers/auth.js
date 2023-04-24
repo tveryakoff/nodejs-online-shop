@@ -19,8 +19,8 @@ const postLogin = async (req, res) => {
 
   if (isMatch) {
     req.session.user = user
-    await req.session.save()
-    return res.redirect('/')
+    req.session.isLoggedIn = true
+    return req.session.save(res.redirect('/'))
   }
 
   return res.redirect('/login')

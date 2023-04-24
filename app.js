@@ -1,4 +1,7 @@
 const express = require('express')
+const csurf = require('csurf')
+var cookieParser = require('cookie-parser')
+
 const {shopRoutes, adminRouts} = require('./routing')
 const path = require('path')
 const rootDir = require('./constants/rootDir')
@@ -14,11 +17,15 @@ app.set('view engine', 'pug');
 // Already default folder
 app.set('views', 'views')
 
+const csrfProtection = csurf({cookie: true})
+
 app.use(express.urlencoded({extended: true}))
 
 app.use(express.static(path.join(rootDir, 'public')))
 
 app.use(session)
+app.use(cookieParser())
+app.use(csrfProtection)
 app.use(addData)
 app.use('/admin', requireAuth, adminRouts)
 app.use(shopRoutes)

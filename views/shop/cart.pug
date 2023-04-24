@@ -9,16 +9,19 @@ block content
         .span #{product.cartProductId.title}
         .cart-buttons
           form(action="/cart-delete-product", method="POST")
+            input(type="hidden" name="_csrf" value=csrfToken)
             input(type="hidden", value=product.cartProductId._id, name="productId")
             button.cart__action-button(type="submit") -
           span.cart-product__count #{product.count}
           form(action="/cart-add-product", method="POST")
+            input(type="hidden" name="_csrf" value=csrfToken)
             input(type="hidden", value=product.cartProductId._id, name="productId")
             button.cart__action-button(type="submit") +
     .cart-price__wrapper
       span Total: #{totalPrice}$
       form(action="/cart-create-order", method="POST")
-       button.btn-action(type="submit") Order Now !
+        input(type="hidden" name="_csrf" value=csrfToken)
+        button.btn-action(type="submit") Order Now !
 
 
 
