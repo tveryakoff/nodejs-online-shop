@@ -84,6 +84,12 @@ userSchema.methods.clearCart = function () {
   this.save()
   }
 
+module.exports = {
+  User: model(userCollection, userSchema),
+  collection: userCollection
+}
+
+
 // class User {
 //   constructor({_id, name, email, cart}) {
 //     this.name = name;
@@ -232,7 +238,3 @@ userSchema.methods.clearCart = function () {
 //   }
 // })
 
-module.exports = {
-  User: model(userCollection, userSchema),
-  collection: userCollection
-}

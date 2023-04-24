@@ -10,6 +10,7 @@ const {
   deleteProductFromCart,
   createOrder, getUserOrder
 } = require("../controllers/shop");
+const {requireAuth} = require("../middlewares/auth");
 
 const shopRoutes = express.Router()
 
@@ -19,19 +20,19 @@ shopRoutes.get('/product-list', getProducts)
 
 shopRoutes.get('/product-detail/:productId', getProductById)
 //
-shopRoutes.get('/cart', getCart)
+shopRoutes.get('/cart', requireAuth, getCart)
 //
-shopRoutes.post('/cart-add-product', addProductToCart)
+shopRoutes.post('/cart-add-product', requireAuth, addProductToCart)
 //
-shopRoutes.post('/cart-create-order', createOrder)
+shopRoutes.post('/cart-create-order', requireAuth, createOrder)
 //
-shopRoutes.get('/order/:orderId', getUserOrder)
+shopRoutes.get('/order/:orderId', requireAuth, getUserOrder)
 //
-shopRoutes.post('/cart-delete-product', deleteProductFromCart)
+shopRoutes.post('/cart-delete-product',requireAuth, deleteProductFromCart)
 //
-shopRoutes.get('/order-list', getOrderList)
+shopRoutes.get('/order-list',requireAuth, getOrderList)
 //
-shopRoutes.get('/checkout', getCheckout)
+shopRoutes.get('/checkout', requireAuth, getCheckout)
 
 module.exports = {
   shopRoutes

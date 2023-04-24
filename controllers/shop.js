@@ -1,5 +1,6 @@
 const {Product} = require('../models/product')
 const Order =require('../models/orders')
+const getCurrentUser = require('../utils/getUser')
 
 const getIndex = async (req, res) => {
   const productList = await Product.find()
@@ -25,32 +26,35 @@ const getProductById = async (req, res, next) => {
 }
 
 const getCart = async (req, res, next) => {
-  await req.user.populate('cart.items.cartProductId')
-  return res.render('shop/cart', {pageTitle: 'Your Cart', path: '/cart', productList: req.user.cart.items, totalPrice: req.user.totalPrice, userId: req.user._id})
+  const user = getCurrentUser(req)
+  await user.populate('cart.items.cartProductId')
+  return res.render('shop/cart', {pageTitle: 'Your Cart', path: '/cart', productList: user.cart.items, totalPrice: user.totalPrice, userId: user._id})
 }
 
 const addProductToCart = async (req, res) => {
+  const user = getCurrentUser(req)
   const productId = req.body.productId
   if (!productId) {
     return
   }
-  await req.user.addProductToCart(productId)
+  await user.addProductToCart(productId)
   return res.redirect('/cart')
 }
 
 const createOrder = async (req, res) => {
-  await req.user.populate('cart.items.cartProductId')
-  await req.user.populate('cart.totalPrice')
+  const user = getCurrentUser(req)
+  await user.populate('cart.items.cartProductId')
+  await user.populate('cart.totalPrice')
   const order = new Order({
     user: {
-      name: req.user.name,
-      userId: req.user?._id,
+      name: user.name,
+      userId: user?._id,
     },
-    totalPrice: req.user.cart.totalPrice,
-    products: req.user.cart.items.map(item => ({count: item.count, productData: {title: item.cartProductId.title, price: item.cartProductId.price, _id: item.cartProductId._id}}))
+    totalPrice: user.cart.totalPrice,
+    products: user.cart.items.map(item => ({count: item.count, productData: {title: item.cartProductId.title, price: item.cartProductId.price, _id: item.cartProductId._id}}))
   })
   await order.save()
-  await req.user.clearCart()
+  await user.clearCart()
   return res.redirect(`/order/${order._id}`)
 }
 
@@ -70,8 +74,9 @@ const getUserOrder = async (req, res) => {
 
 const deleteProductFromCart = async (req, res) => {
   try {
+    const user = getCurrentUser(req)
 
-    await req.user.removeProductFromCart(req.body.productId)
+    await user.removeProductFromCart(req.body.productId)
 
     return res.redirect('/cart')
   } catch (e) {
@@ -80,7 +85,8 @@ const deleteProductFromCart = async (req, res) => {
 }
 
 const getOrderList = async (req, res) => {
-  const orderList  = await Order.find({"user.userId": req.user._id})
+  const user = getCurrentUser(req)
+  const orderList  = await Order.find({"user.userId": user._id})
   res.render('shop/orderList.pug', {pageTitle: 'Your orders', path: '/order-list', orderList})
 }
 

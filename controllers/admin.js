@@ -1,8 +1,10 @@
 const {Product} = require('../models/product')
+const getCurrentUser = require('../utils/getUser')
 
 const createProduct = async (req, res) => {
+  const user = getCurrentUser(req)
   const productData = {
-    title: req.body.title, imageUrl: req.body.imageUrl, price: req.body.price, description: req.body.description, userId: req?.user?._id
+    title: req.body.title, imageUrl: req.body.imageUrl, price: req.body.price, description: req.body.description, userId: user?._id
   }
 
   const product = new Product(productData)

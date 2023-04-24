@@ -9,7 +9,8 @@ block content
     .product__data
       p.product__description #{product.description}
       p.product__price Price: #{product.price}$
-      form(action=`/cart-add-product`, method="POST")
-        input(name="productId", value=product._id, type="hidden")
-        button.btn-action.product__button(type="submit") Add to Cart
+      if isLoggedIn
+        form(action=`/cart-add-product`, method="POST")
+          input(name="productId", value=product._id, type="hidden")
+          button.btn-action.product__button(type="submit") Add to Cart
 

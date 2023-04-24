@@ -44,6 +44,19 @@ a {
     color: #252525;
 }
 
+.main-header__button {
+    text-decoration: none;
+    margin-right: 0.8rem;
+    color: #252525;
+    outline: none;
+    background-color: transparent;
+    border: none;
+}
+
+.main-header__button:hover {
+    color: #9444f6;
+}
+
 .main-header__link-active {
     color: #500cde;
 }
@@ -51,6 +64,8 @@ a {
 .main-header__link:hover {
     color: #9444f6;
 }
+
+
 
 .main-section {
     display: flex;

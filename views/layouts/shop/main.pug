@@ -15,17 +15,24 @@ html(lang="en")
             a.main-header__link(href="/", class=(path === '/' ? 'main-header__link-active' : '')) Shop
           li
             a.main-header__link(href="/product-list", class=(path==='/product-list' ? 'main-header__link-active' : '')) Products
-          li
-            a.main-header__link(href="/cart", class=(path==='/cart' ? 'main-header__link-active' : '')) Cart
-          li
-            a.main-header__link(href="/order-list", class=(path === '/order-list' ? 'main-header__link-active' : '')) Orders
-          li
-            a.main-header__link(href="/admin/add-product", class=(path==="/admin/add-product" ? 'main-header__link-active' : '')) Add Product
-          li
-            a.main-header__link(href="/admin/product-list", class=(path==="/admin/product-list" ? 'main-header__link-active' : '')) Product list admin
+          if isLoggedIn
+            li
+              a.main-header__link(href="/cart", class=(path==='/cart' ? 'main-header__link-active' : '')) Cart
+            li
+              a.main-header__link(href="/order-list", class=(path === '/order-list' ? 'main-header__link-active' : '')) Orders
+            li
+              a.main-header__link(href="/admin/add-product", class=(path==="/admin/add-product" ? 'main-header__link-active' : '')) Add Product
+            li
+              a.main-header__link(href="/admin/product-list", class=(path==="/admin/product-list" ? 'main-header__link-active' : '')) Product list admin
         ul.main-header__list
-          li
-            a.main-header__link(href="/login", class=(path === '/login' ? 'main-header__link-active' : '')) Login
+          if !isLoggedIn
+            li
+              a.main-header__link(href="/login", class=(path === '/login' ? 'main-header__link-active' : '')) Login
+          if isLoggedIn
+            li
+              form(action='/logout', method="POST")
+                button.main-header__button(type="submit", class=(path === '/login' ? 'main-header__link-active' : '')) Logout
+
 
     main
       div.wrapper
