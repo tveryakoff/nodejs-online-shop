@@ -47,7 +47,7 @@ const createOrder = async (req, res) => {
   await user.populate('cart.totalPrice')
   const order = new Order({
     user: {
-      name: user.name,
+      email: user.email,
       userId: user?._id,
     },
     totalPrice: user.cart.totalPrice,

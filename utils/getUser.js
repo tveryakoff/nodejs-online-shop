@@ -1,5 +1,5 @@
 const getCurrentUser = (req) => {
-  const user = req?.session?.user
+  const user = req?.user
   return user || null
 }
 

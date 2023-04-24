@@ -11,22 +11,28 @@ const requireAuth = async (req,res,next) => {
   if (!userObj) {
     return res.render('errors/404')
   }
-  const user = await User.findById('6425d669b463a4f61715a3c1')
-  req.session.user = user
-  await req.session.save()
+  const user = await User.findById(userObj._id)
+  req.user = user
   next()
 }
 
-const addResData = async (req,res,next) => {
-  const userObj = getCurrentUser(req)
-  if (userObj) {
-    res.locals.isLoggedIn = true
+const addData = async (req,res,next) => {
+  const userObj = req.session?.user
+  if (!userObj) {
+    res.locals.isLoggedIn = false
+    req.user = null
+    return next()
   }
-  next()
+  const user = await User.findById(userObj._id)
+  req.user = user
+
+  res.locals.isLoggedIn = !!userObj
+
+  return next()
 }
 
 module.exports = {
   session,
   requireAuth,
-  addResData
+  addData
 }
