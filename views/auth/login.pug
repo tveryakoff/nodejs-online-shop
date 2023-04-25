@@ -13,5 +13,8 @@ block content
       .input-wrapper
         label.input-label(for="password") Password
         input.form__input(id="password", type="password", name="password" )
+      if error
+        .input-wrapper
+          .error #{error}
       button.form__button(type="submit") Login
 

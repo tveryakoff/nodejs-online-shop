@@ -50,3 +50,9 @@
 .form__button:hover {
     background-color: #219fc5
 }
+
+.error {
+    color: #b62d2d;
+    display: flex;
+    justify-content: center;
+}

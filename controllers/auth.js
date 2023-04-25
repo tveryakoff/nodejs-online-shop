@@ -2,7 +2,11 @@ const {User} = require("../models/user");
 const bcrypt = require('bcryptjs')
 
 const getLogin = (req, res) => {
-  return res.render('auth/login', {pageTitle: 'Login', path: '/login'})
+  let errorMessage = req.flash('error')
+  if (errorMessage.length && errorMessage.length > 1) {
+    errorMessage = errorMessage[0]
+  }
+  return res.render('auth/login', {pageTitle: 'Login', path: '/login', error: errorMessage})
 }
 
 const postLogin = async (req, res) => {
@@ -12,6 +16,7 @@ const postLogin = async (req, res) => {
 
   if (!user) {
     console.log(`User with email ${email} not found`)
+    req.flash('error', 'Wrong email or password')
     return res.redirect('/login')
   }
 
