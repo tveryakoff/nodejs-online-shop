@@ -56,3 +56,11 @@
     display: flex;
     justify-content: center;
 }
+
+.reset_link {
+    color: #219fc5;
+}
+
+.reset_link:hover {
+    color: #8b30e3;
+}

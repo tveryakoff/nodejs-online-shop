@@ -1,13 +1,13 @@
 const {User} = require("../models/user");
 const bcrypt = require('bcryptjs')
+const { promisify } = require('util')
+const randomBytesAsync = promisify(require('crypto').randomBytes)
 const mailService = require('../services/Mail')
+const {getRequestFlashedError} = require("../utils/error");
 
 
 const getLogin = (req, res) => {
-  let errorMessage = req.flash('error')
-  if (errorMessage.length && errorMessage.length > 1) {
-    errorMessage = errorMessage[0]
-  }
+  const errorMessage = getRequestFlashedError(req)
   return res.render('auth/login', {pageTitle: 'Login', path: '/login', error: errorMessage})
 }
 
@@ -54,20 +54,95 @@ const postSignUp = async (req,res,next) => {
   const hashedPassword = await bcrypt.hash(password, 12)
   const newUser = new User({email, password: hashedPassword})
 
-  mailService.sendMail({
-    from: 'onlineshop123@example.com',
-    to: email,
-    subject: 'Hello',
-    html: '<p>Welcome to my online shop!</p>'
-  }, function(err, info) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log(info);
-    }
-  });
+  // mailService.sendMail({
+  //   from: 'onlineshop123@example.com',
+  //   to: email,
+  //   subject: 'Hello',
+  //   html: '<p>Welcome to my online shop!</p>'
+  // }, function(err, info) {
+  //   if (err) {
+  //     console.error(err);
+  //   } else {
+  //     console.log(info);
+  //   }
+  // });
   await newUser.save()
   return res.redirect('/login')
+}
+
+const getResetPassword = (req, res) => {
+  const errorMessage = getRequestFlashedError(req)
+  return res.render('auth/resetPassword', {pageTitle: 'Reset Password', path: '/reset-password', error: errorMessage})
+}
+
+const postResetPassword = async (req, res) => {
+  try {
+    const {email} = req.body
+    const randomToken = await randomBytesAsync(32)
+    const randomTokenStr = randomToken.toString('hex')
+    const user = await User.findOne({email})
+    if (!user) {
+      req.flash('error', 'No users with such email found')
+      return res.redirect('/reset-password')
+    }
+    user.resetToken = randomTokenStr
+    user.resetTokenExpiration = Date.now() + 1000 * 60 * 60 // 1 hour in ms
+    await user.save()
+    // TODO Replace with a real email after unblocking
+    console.log('link:', `(http://${req.headers.host}/create-new-password/${randomTokenStr})`)
+    return res.render('auth/email-sent-confirmation', {pageTitle: 'Password recovery', path: '/email-sent-confirmation', email})
+
+//     mailService.sendMail({
+//       from: 'onlineshop123@example.com',
+//       to: email,
+//       subject: 'Reset Password',
+//       html: `
+//             <p>You requested a password reset</p>
+//             <p>Click this <a href=http://${req.headers.host}/create-new-password/${randomTokenStr}>Link</a> to reset your password</p>
+//             <p>Link expires in 1 hour</p>
+// `
+//     }, function(error) {console.log('e', error)})
+  }
+  catch (e) {
+    console.error('error', e)
+  }
+}
+
+const getCreateNewPassword = async (req, res, next) => {
+  const token = req?.params?.token
+
+  if (!token) {
+    req.flash('error', 'Wrong link, try again')
+    return res.redirect('/reset-password')
+  }
+
+  const user = await User.findOne({resetToken: token, resetTokenExpiration: {$gt: Date.now()}})
+  if (!user) {
+    req.flash('error', 'Wrong link, try again or token expired')
+    return res.redirect('/reset-password')
+  }
+  return res.render('auth/create-new-password', {pageTitle: 'New Password', path: 'create-new-password', token, userId: user._id?.toString()})
+
+}
+
+const postCreateNewPassword = async (req, res, next) => {
+  const {password, userId, token} = req.body
+
+  const user = await User.findOne({resetToken: token, resetTokenExpiration: {$gt: Date.now()}, _id: userId})
+
+  if (!user) {
+    console.error('user not found')
+    return res.redirect('/')
+  }
+
+  const passwordHash = await bcrypt.hash(password, 12)
+  user.password = passwordHash
+  user.resetToken = undefined
+  user.resetTokenExpiration = undefined
+  await user.save()
+
+  return res.redirect('/login')
+
 }
 
 module.exports = {
@@ -75,5 +150,9 @@ module.exports = {
   postLogin,
   postLogout,
   getSignUp,
-  postSignUp
+  postSignUp,
+  getResetPassword,
+  postResetPassword,
+  getCreateNewPassword,
+  postCreateNewPassword
 }

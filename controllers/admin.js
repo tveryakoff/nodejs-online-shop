@@ -38,7 +38,8 @@ const deleteProduct = async (req, res) => {
 }
 
 const getProducts = async (req, res) => {
- const productList = await Product.find()
+  const user = getCurrentUser(req)
+ const productList = await Product.find({userId: user._id})
 
   return res.render('admin/product-list.pug', {
     productList, pageTitle: 'Admin-products', path: '/admin/product-list'

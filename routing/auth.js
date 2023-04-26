@@ -3,7 +3,7 @@ const {
   getLogin,
   postLogin,
   postLogout,
-  getSignUp, postSignUp
+  getSignUp, postSignUp, getResetPassword, postResetPassword, getCreateNewPassword,postCreateNewPassword
 } = require('../controllers/auth')
 
 const authRoutes = express.Router()
@@ -17,6 +17,14 @@ authRoutes.post('/logout', postLogout)
 authRoutes.get('/signUp', getSignUp)
 
 authRoutes.post('/signUp', postSignUp)
+
+authRoutes.get ('/reset-password', getResetPassword)
+
+authRoutes.post('/reset-password', postResetPassword)
+
+authRoutes.get('/create-new-password/:token', getCreateNewPassword)
+
+authRoutes.post('/create-new-password', postCreateNewPassword)
 
 
 module.exports = {
