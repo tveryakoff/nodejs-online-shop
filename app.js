@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express')
 const csurf = require('csurf')
 const cookieParser = require('cookie-parser')
@@ -10,6 +12,7 @@ const errorController = require('./controllers/error')
 const {connectMongoDb} = require('./utils/mongo-database')
 const {requireAuth, session, addData} = require('./middlewares/auth')
 const {authRoutes} = require("./routing/auth");
+
 
 const app = express()
 

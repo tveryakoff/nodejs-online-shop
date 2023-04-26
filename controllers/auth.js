@@ -90,18 +90,20 @@ const postResetPassword = async (req, res) => {
     await user.save()
     // TODO Replace with a real email after unblocking
     console.log('link:', `(http://${req.headers.host}/create-new-password/${randomTokenStr})`)
+
+    mailService.sendMail({
+      from: 'onlineshop123@example.com',
+      to: email,
+      subject: 'Reset Password',
+      html: `
+            <p>You requested a password reset</p>
+            <p>Click this <a href=http://${req.headers.host}/create-new-password/${randomTokenStr}>Link</a> to reset your password</p>
+            <p>Link expires in 1 hour</p>
+`
+    }, function(error) {console.log('e', error)})
+
     return res.render('auth/email-sent-confirmation', {pageTitle: 'Password recovery', path: '/email-sent-confirmation', email})
 
-//     mailService.sendMail({
-//       from: 'onlineshop123@example.com',
-//       to: email,
-//       subject: 'Reset Password',
-//       html: `
-//             <p>You requested a password reset</p>
-//             <p>Click this <a href=http://${req.headers.host}/create-new-password/${randomTokenStr}>Link</a> to reset your password</p>
-//             <p>Link expires in 1 hour</p>
-// `
-//     }, function(error) {console.log('e', error)})
   }
   catch (e) {
     console.error('error', e)

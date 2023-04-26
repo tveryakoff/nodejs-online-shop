@@ -27,7 +27,6 @@ const updateProduct = async (req, res) => {
   } catch (e) {
     console.error('error during product update', e)
   }
-
 }
 
 const deleteProduct = async (req, res) => {
