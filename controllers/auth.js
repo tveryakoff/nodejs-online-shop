@@ -1,5 +1,7 @@
 const {User} = require("../models/user");
 const bcrypt = require('bcryptjs')
+const mailService = require('../services/Mail')
+
 
 const getLogin = (req, res) => {
   let errorMessage = req.flash('error')
@@ -51,6 +53,19 @@ const postSignUp = async (req,res,next) => {
   }
   const hashedPassword = await bcrypt.hash(password, 12)
   const newUser = new User({email, password: hashedPassword})
+
+  mailService.sendMail({
+    from: 'onlineshop123@example.com',
+    to: email,
+    subject: 'Hello',
+    html: '<p>Welcome to my online shop!</p>'
+  }, function(err, info) {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log(info);
+    }
+  });
   await newUser.save()
   return res.redirect('/login')
 }
