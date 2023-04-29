@@ -25,6 +25,10 @@
     height: 2rem;
 }
 
+.for__input_error {
+    border: 1px solid #ea0b56;
+}
+
 .form__input:focus {
     border: 2px solid #1389b6;
     outline: none;

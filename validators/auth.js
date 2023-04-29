@@ -6,12 +6,11 @@ const signInValidator = [
   body('email', 'Please enter a valid email address').notEmpty().withMessage('This field is required').isEmail(),
   body('email').custom(async (value, {req}) => {
     const user = await User.findOne({email: value})
-    if (user) {
-      throw new Error(`User with email '${value}' already exists`)
+    if (!user) {
+      throw new Error(`User with email '${value}' doesn't exists`)
     }
     return true
   }),
-  body('password', 'Password must contain at least 2 characters').notEmpty().withMessage('This field is required').isLength({min:2}),
 ]
 
 const signUpValidator = [

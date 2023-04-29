@@ -19,7 +19,7 @@ const postLogin = async (req, res) => {
   const {errors, isEmpty} = getValidationErrorsMapped(req)
 
   if (!isEmpty) {
-    return res.render('auth/login', {pageTitle: 'Login', path: '/login', errors})
+    return res.status(422).render('auth/login', {pageTitle: 'Login', path: '/login', errors, values: {email, password}})
   }
 
   const isMatch = await bcrypt.compare(password, user.password)
@@ -30,7 +30,7 @@ const postLogin = async (req, res) => {
     return req.session.save(res.redirect('/'))
   }
 
-  return res.redirect('/login')
+  return res.status(422).render('auth/login', {pageTitle: 'Login', path: '/login', errors: {email: 'Wrong email or password'}, values: {email, password}})
 
 }
 
@@ -46,10 +46,10 @@ const getSignUp = async (req,res,next) => {
 }
 
 const postSignUp = async (req,res,next) => {
-  const {email, password} = req.body
+  const {email, password, confirmPassword} = req.body
   const {errors, isEmpty} = getValidationErrorsMapped(req)
   if (!isEmpty) {
-    return res.render('auth/signUp', {pageTitle: 'Sign Up', path: '/signUp', errors})
+    return res.status(422).render('auth/signUp', {pageTitle: 'Sign Up', path: '/signUp', errors, values:{email, password, confirmPassword}})
   }
   const hashedPassword = await bcrypt.hash(password, 12)
   const newUser = new User({email, password: hashedPassword})

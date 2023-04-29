@@ -10,19 +10,19 @@ block content
       .input-wrapper
         label.input-label(for="email") Email
         .input-error-wrapper
-          input.form__input(id="email", type="email", name="email")
+          input.form__input(class=errors && errors.email && 'for__input_error', id="email", type="email", name="email", value=values ? values.email : undefined)
           if(errors && errors.email)
             .error #{errors.email}
       .input-wrapper
         label.input-label(for="password") Password
         .input-error-wrapper
-          input.form__input(id="password", type="password", name="password" )
+          input.form__input(class=errors && errors.password && 'for__input_error', id="password", type="password", name="password", value= values ? values.password : undefined)
           if(errors && errors.password)
             .error #{errors.password}
       .input-wrapper
         label.input-label(for="confirmPassword") Confirm Password
         .input-error-wrapper
-          input.form__input(id="confirmPassword", type="password", name="confirmPassword" )
+          input.form__input(class=errors && errors.confirmPassword && 'for__input_error', id="confirmPassword", type="password", name="confirmPassword" value=values ? values.email : undefined )
           if(errors && errors.confirmPassword)
             .error #{errors.confirmPassword}
       button.form__button(type="submit") Sign Up
