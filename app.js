@@ -12,6 +12,8 @@ const errorController = require('./controllers/error')
 const {connectMongoDb} = require('./utils/mongo-database')
 const {requireAuth, session, addData} = require('./middlewares/auth')
 const {authRoutes} = require("./routing/auth");
+const errorRoutes = require("./routing/error");
+const errorMiddleware = require('./middlewares/error')
 
 
 const app = express()
@@ -35,6 +37,8 @@ app.use(addData)
 app.use('/admin', requireAuth, adminRouts)
 app.use(shopRoutes)
 app.use(authRoutes)
+app.use('/error', errorRoutes)
+app.use(errorMiddleware)
 
 app.use(errorController.get404)
 

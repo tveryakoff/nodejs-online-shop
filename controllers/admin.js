@@ -2,11 +2,11 @@ const {Product} = require('../models/product')
 const getCurrentUser = require('../utils/getUser')
 const {getValidationErrorsMapped} = require("../utils/error");
 
-const createProduct = async (req, res) => {
+const createProduct = async (req, res, next) => {
   const user = getCurrentUser(req)
   const {errors, isEmpty}= getValidationErrorsMapped(req)
   const productData = {
-    title: req.body.title, imageUrl: req.body.imageUrl, price: req.body.price, description: req.body.description, userId: user?._id
+    title: req.body.title, imageUrl: req.body.imageUrl, price: req.body.price, description: req.body.description
   }
 
   if (!isEmpty) {
@@ -17,7 +17,11 @@ const createProduct = async (req, res) => {
 
   const product = new Product(productData)
 
-  await product.save()
+  try {
+    await product.save()
+  } catch (error) {
+    return next({...error, status: 500})
+  }
 
   return res.redirect('/admin/product-list');
 }
