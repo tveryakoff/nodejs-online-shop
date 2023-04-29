@@ -2,7 +2,7 @@ const {User} = require("../models/user");
 const bcrypt = require('bcryptjs')
 const { promisify } = require('util')
 const randomBytesAsync = promisify(require('crypto').randomBytes)
-const mailService = require('../services/Mail')
+const sendMail = require('../services/Mail')
 const {getRequestFlashedError, getValidationErrorsMapped} = require("../utils/error");
 
 
@@ -54,18 +54,11 @@ const postSignUp = async (req,res,next) => {
   const hashedPassword = await bcrypt.hash(password, 12)
   const newUser = new User({email, password: hashedPassword})
 
-  // mailService.sendMail({
-  //   from: 'onlineshop123@example.com',
-  //   to: email,
-  //   subject: 'Hello',
-  //   html: '<p>Welcome to my online shop!</p>'
-  // }, function(err, info) {
-  //   if (err) {
-  //     console.error(err);
-  //   } else {
-  //     console.log(info);
-  //   }
-  // });
+  await sendMail({
+    to: email,
+    subject: 'Hello',
+    html: '<p>Welcome to my online shop!</p>'
+  })
   await newUser.save()
   return res.redirect('/login')
 }
@@ -88,11 +81,8 @@ const postResetPassword = async (req, res) => {
     user.resetToken = randomTokenStr
     user.resetTokenExpiration = Date.now() + 1000 * 60 * 60 // 1 hour in ms
     await user.save()
-    // TODO Replace with a real email after unblocking
-    console.log('link:', `(http://${req.headers.host}/create-new-password/${randomTokenStr})`)
 
-    mailService.sendMail({
-      from: 'onlineshop123@example.com',
+    sendMail({
       to: email,
       subject: 'Reset Password',
       html: `
@@ -100,7 +90,7 @@ const postResetPassword = async (req, res) => {
             <p>Click this <a href=http://${req.headers.host}/create-new-password/${randomTokenStr}>Link</a> to reset your password</p>
             <p>Link expires in 1 hour</p>
 `
-    }, function(error) {console.log('e', error)})
+    })
 
     return res.render('auth/email-sent-confirmation', {pageTitle: 'Password recovery', path: '/email-sent-confirmation', email})
 
