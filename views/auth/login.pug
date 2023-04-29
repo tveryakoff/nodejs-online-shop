@@ -5,17 +5,20 @@ block styles
 
 block content
   section.main-section
-    form.form(action='/login', method="POST")
+    form.form(action='/login', method="POST" novalidate="true")
       input(type="hidden" name="_csrf" value=csrfToken)
       .input-wrapper
         label.input-label(for="email") Email
-        input.form__input(id="email", type="email", name="email")
+        .input-error-wrapper
+          input.form__input(id="email", type="email", name="email")
+          if (errors && errors.email)
+            .error #{errors.email}
       .input-wrapper
         label.input-label(for="password") Password
-        input.form__input(id="password", type="password", name="password" )
-      if error
-        .input-wrapper
-          .error #{error}
+        .input-error-wrapper
+          input.form__input(id="password", type="password", name="password" )
+          if (errors && errors.password)
+            .error #{errors.password}
       .input-wrapper
         a.reset_link(href="/reset-password") Reset Password
       button.form__button(type="submit") Login

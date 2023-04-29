@@ -64,3 +64,10 @@
 .reset_link:hover {
     color: #8b30e3;
 }
+
+.input-error-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-top: 4px;
+}
