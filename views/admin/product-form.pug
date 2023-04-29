@@ -4,21 +4,33 @@ block styles
   link(rel="stylesheet", href="/css/core/form.css")
 block content
   section.main-section
-    form.form(action=`${isEdit ? "/admin/product-edit" : '/admin/product-add'}`, method="POST")
+    form.form(action=`${isEdit ? "/admin/product-edit" : '/admin/product-add'}`, method="POST" novalidate="true")
       input(type="hidden" name="_csrf" value=csrfToken)
       if (isEdit)
         input.form__input(type="hidden", name="_id", value=product._id)
       .input-wrapper
         label.input-label(for="title") Name
-        input.form__input(id="title", type="text", name="title", value=isEdit && product.title)
+        .input-error-wrapper
+          input.form__input(class = errors && errors.title && 'for__input_error', id="title", type="text", name="title", value=isEdit && product.title)
+          if (errors && errors.title)
+            .error #{errors.title}
       .input-wrapper
         label.input-label(for="image") Image
-        input.form__input(id="image", type="text", name="imageUrl" value=isEdit && product.imageUrl)
+        .input-error-wrapper
+          input.form__input(class = errors && errors.imageUrl && 'for__input_error', id="image", type="text", name="imageUrl" value=isEdit && product.imageUrl)
+          if (errors && errors.imageUrl)
+            .error #{errors.imageUrl}
       .input-wrapper
         label.input-label(for="image") Price
-        input.form__input(id="price", type="number", name="price", step="0.01" value=isEdit && product.price)
+        .input-error-wrapper
+          input.form__input(class = errors && errors.price && 'for__input_error', id="price", type="number", name="price", step="0.01" value=isEdit && product.price)
+          if (errors && errors.price)
+            .error #{errors.price}
       .input-wrapper
         label.input-label(for="image") Description
-        textarea.form__input.add-product-form__textarea(id="description", rows="5", name="description" ) #{isEdit && product.description}
+        .input-error-wrapper
+          textarea.form__input.add-product-form__textarea(class = errors && errors.description && 'for__input_error', id="description", rows="5", name="description" ) #{isEdit ? product.description : ''}
+          if (errors && errors.description)
+            .error #{errors.description}
       button.form__button(type="submit") #{isEdit ? 'Edit' : 'Create'}
 

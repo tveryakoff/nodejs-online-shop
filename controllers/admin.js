@@ -1,10 +1,18 @@
 const {Product} = require('../models/product')
 const getCurrentUser = require('../utils/getUser')
+const {getValidationErrorsMapped} = require("../utils/error");
 
 const createProduct = async (req, res) => {
   const user = getCurrentUser(req)
+  const {errors, isEmpty}= getValidationErrorsMapped(req)
   const productData = {
     title: req.body.title, imageUrl: req.body.imageUrl, price: req.body.price, description: req.body.description, userId: user?._id
+  }
+
+  if (!isEmpty) {
+    return res.status(422).render('admin/product-form.pug', {
+      pageTitle: 'Edit product', path: '/admin/add-product', product: productData, isEdit: false, errors,
+    })
   }
 
   const product = new Product(productData)
@@ -17,6 +25,14 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   const productData = {
     title: req.body.title, imageUrl: req.body.imageUrl, price: req.body.price, description: req.body.description, _id: req.body._id
+  }
+
+  const {errors, isEmpty}= getValidationErrorsMapped(req)
+
+  if (!isEmpty) {
+    return res.status(422).render('admin/product-form.pug', {
+      pageTitle: 'Edit product', path: '/admin/add-product', product: productData, isEdit: true, errors,
+    })
   }
 
   try {
