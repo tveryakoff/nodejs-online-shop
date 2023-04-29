@@ -11,6 +11,7 @@ const signInValidator = [
     }
     return true
   }),
+  body('password').trim()
 ]
 
 const signUpValidator = [
@@ -22,14 +23,14 @@ const signUpValidator = [
     }
     return true
   }),
-  body('password', 'Password must contain at least 2 characters').notEmpty().withMessage('This field is required').isLength({min:2}),
+  body('password', 'Password must contain at least 2 characters').notEmpty().withMessage('This field is required').isLength({min:2}).trim(),
   body('confirmPassword').notEmpty().withMessage('This.field is required').custom((value, {req}) => {
     if (value !== req.body.password) {
       throw new Error('Passwords have to match')
     }
 
     return true
-  })
+  }).trim()
 ]
 
 module.exports = {
