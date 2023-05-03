@@ -1,19 +1,24 @@
 const {Product} = require('../models/product')
 const getCurrentUser = require('../utils/getUser')
 const {getValidationErrorsMapped} = require("../utils/error");
+const {parseMultiPartForm} = require("../utils/form");
 
 const createProduct = async (req, res, next) => {
   const user = getCurrentUser(req)
+
   const {errors, isEmpty}= getValidationErrorsMapped(req)
   const productData = {
-    title: req.body.title, imageUrl: req.body.imageUrl, price: req.body.price, description: req.body.description
+    title: req.body.title, price: req.body.price, description: req.body.description, userId: user?._id
   }
+
+  console.log('FILES', req.file)
 
   if (!isEmpty) {
     return res.status(422).render('admin/product-form.pug', {
-      pageTitle: 'Edit product', path: '/admin/add-product', product: productData, isEdit: false, errors,
+      pageTitle: 'Add product', path: '/admin/add-product', product: productData, isEdit: false, errors,
     })
   }
+
 
   const product = new Product(productData)
 

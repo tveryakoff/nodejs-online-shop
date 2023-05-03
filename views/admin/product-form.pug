@@ -4,7 +4,7 @@ block styles
   link(rel="stylesheet", href="/css/core/form.css")
 block content
   section.main-section
-    form.form(action=`${isEdit ? "/admin/product-edit" : '/admin/product-add'}`, method="POST" novalidate="true")
+    form.form(method="post", action=`${isEdit ? `/admin/product-edit?_csrf=${csrfToken}` : `/admin/product-add?_csrf=${csrfToken}`}`, novalidate="true" enctype="multipart/form-data")
       input(type="hidden" name="_csrf" value=csrfToken)
       if (isEdit)
         input.form__input(type="hidden", name="_id", value=product._id)
@@ -17,9 +17,10 @@ block content
       .input-wrapper
         label.input-label(for="image") Image
         .input-error-wrapper
-          input.form__input(class = errors && errors.imageUrl && 'for__input_error', id="image", type="text", name="imageUrl" value=isEdit && product.imageUrl)
-          if (errors && errors.imageUrl)
-            .error #{errors.imageUrl}
+          input.form__input(class = errors && errors.image && 'for__input_error', id="image", type="file", name="image")
+          if (errors && errors.image)
+            .error #{errors.image}
+
       .input-wrapper
         label.input-label(for="image") Price
         .input-error-wrapper

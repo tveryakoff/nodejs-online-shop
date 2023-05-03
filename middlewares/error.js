@@ -2,6 +2,7 @@ const errorMiddleware = (error, req, res, next) => {
   if (!error.status) {
     return res.status(404).render('errors/404', {pageTitle: '404'})
   }
+  console.error("!!500!!", error)
   switch (error.status) {
     case (500):
       return res.status(500).render('errors/500', {pageTitle: '500'})
