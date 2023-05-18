@@ -99,9 +99,16 @@ const getCheckout = (req, res) => {
 
 const downloadInvoice = async (req, res) => {
   const orderId = req.params.orderId
-  const invoiceName = `order-invoice-${orderId}.png`
+  const order = await Order.findById(orderId)
+  if (order?.user?.userId?.toString?.() !== req.user._id.toString?.()) {
+    return res.render('errors/404.pug', {pageTitle: 'No such order invoice'})
+  }
+  const invoiceName = `order-invoice-${orderId}.pdf`
   const invoicePath = path.join(rootDir, 'assets', 'protected', 'order-invoices', invoiceName)
   const fileData = await fs.readFile(invoicePath)
+  res.setHeader('Content-Type', 'application/pdf')
+  // Sets the right name and extension for downloading
+  res.setHeader('Content-Disposition', 'inline; filename="' + invoiceName + '"')
   return res.send(fileData)
 }
 
