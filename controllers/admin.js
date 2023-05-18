@@ -1,7 +1,9 @@
 const {Product} = require('../models/product')
 const getCurrentUser = require('../utils/getUser')
 const {getValidationErrorsMapped} = require("../utils/error");
-const {parseMultiPartForm} = require("../utils/form");
+const fs = require('fs/promises')
+const path = require('path')
+const rootDir = require('../constants/rootDir')
 
 const createProduct = async (req, res, next) => {
   const user = getCurrentUser(req)
@@ -50,6 +52,9 @@ const updateProduct = async (req, res) => {
   }
 
   if (req.file) {
+    const product = await Product.findById(productData._id)
+    // Delete old Image
+    await fs.unlink(path.join(rootDir, 'assets', 'public', 'uploads', product.imageUrl))
     productData.imageUrl = req.file.filename
   }
 

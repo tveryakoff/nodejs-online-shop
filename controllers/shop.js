@@ -114,6 +114,7 @@ const downloadInvoice = async (req, res) => {
   const pdfDoc = new Pdfkit()
 
   res.setHeader('Content-Type', 'application/pdf')
+
   // Sets the right name and extension for downloading
   res.setHeader('Content-Disposition', 'inline; filename="' + invoiceName + '"')
 
@@ -127,13 +128,7 @@ const downloadInvoice = async (req, res) => {
   }
 
   pdfDoc.fontSize(16).text(`Total Price: $${order.totalPrice}`)
-
-
-
   pdfDoc.end()
-
-
-
 }
 
 module.exports = {
