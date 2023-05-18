@@ -12,5 +12,7 @@ block content
           each orderItem in order.products
             a.order-item__wrapper(href=`product-detail/${orderItem.productData._id}`)
               span.order-item__name #{orderItem.productData.title} (#{orderItem.count})
+        a.order-item__invoice(href=`/order-invoice/${order._id}`)
+          h3 Download invoice
   else
     h1 No orders yet

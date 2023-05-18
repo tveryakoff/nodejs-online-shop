@@ -7,7 +7,7 @@
     background-color: white;
 }
 
-.order-item:hover .order-item-header {
+.order-item-header:hover {
         color: #775def;
     }
 
@@ -27,4 +27,12 @@
 .order-item__name {
     font-size: 16px;
     font-weight: normal;
+}
+
+.order-item__invoice {
+    margin-top: 8px;
+}
+
+.order-item__invoice:hover {
+    color: #775def;
 }

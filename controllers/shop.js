@@ -1,6 +1,9 @@
 const {Product} = require('../models/product')
 const Order =require('../models/orders')
 const getCurrentUser = require('../utils/getUser')
+const path = require('path')
+const fs = require('fs/promises')
+const rootDir = require('../constants/rootDir')
 
 const getIndex = async (req, res) => {
   const productList = await Product.find()
@@ -94,6 +97,14 @@ const getCheckout = (req, res) => {
   res.render('shop/checkout', {pageTitle: 'checkout', path: '/checkout'})
 }
 
+const downloadInvoice = async (req, res) => {
+  const orderId = req.params.orderId
+  const invoiceName = `order-invoice-${orderId}.png`
+  const invoicePath = path.join(rootDir, 'assets', 'protected', 'order-invoices', invoiceName)
+  const fileData = await fs.readFile(invoicePath)
+  return res.send(fileData)
+}
+
 module.exports = {
   getIndex,
   getProducts,
@@ -104,5 +115,6 @@ module.exports = {
   addProductToCart,
   deleteProductFromCart,
   createOrder,
-  getUserOrder
+  getUserOrder,
+  downloadInvoice
 }
