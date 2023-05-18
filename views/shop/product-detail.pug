@@ -5,7 +5,7 @@ block styles
 block content
   h1.product__header #{product.title}
   .product
-    img.product__image(src=product.imageUrl || 'https://sacajaweaaudubon.org/wp-content/uploads/2020/06/a-lot-of-books-clipart-6.png', alt=product.title)
+    img.product__image(src=`/uploads/${product.imageUrl}` || 'https://sacajaweaaudubon.org/wp-content/uploads/2020/06/a-lot-of-books-clipart-6.png', alt=product.title)
     .product__data
       p.product__description #{product.description}
       p.product__price Price: #{product.price}$

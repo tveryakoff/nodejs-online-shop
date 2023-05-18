@@ -25,7 +25,7 @@ app.set('views', 'views')
 
 const csrfProtection = csurf({cookie: true})
 
-app.use(express.static(path.join(rootDir, 'public')))
+app.use(express.static(path.join(rootDir, 'assets', 'public')))
 app.use(express.urlencoded({extended: true}))
 
 app.use(session)
