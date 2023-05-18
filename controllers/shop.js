@@ -2,7 +2,8 @@ const {Product} = require('../models/product')
 const Order =require('../models/orders')
 const getCurrentUser = require('../utils/getUser')
 const path = require('path')
-const fs = require('fs/promises')
+const fs = require('fs')
+const Pdfkit = require('pdfkit')
 const rootDir = require('../constants/rootDir')
 
 const getIndex = async (req, res) => {
@@ -105,11 +106,34 @@ const downloadInvoice = async (req, res) => {
   }
   const invoiceName = `order-invoice-${orderId}.pdf`
   const invoicePath = path.join(rootDir, 'assets', 'protected', 'order-invoices', invoiceName)
-  const fileData = await fs.readFile(invoicePath)
+
+  // Not optimized way to read a file, file is read completely and stored im memory, than served
+  // const fileData = await fs.readFile(invoicePath)
+  //  return res.send(fileData)
+
+  const pdfDoc = new Pdfkit()
+
   res.setHeader('Content-Type', 'application/pdf')
   // Sets the right name and extension for downloading
   res.setHeader('Content-Disposition', 'inline; filename="' + invoiceName + '"')
-  return res.send(fileData)
+
+  pdfDoc.pipe(fs.createWriteStream(invoicePath))
+  pdfDoc.pipe(res)
+
+  pdfDoc.fontSize(26).text('Invoice', {underline: true})
+
+  for (const product of order.products) {
+    pdfDoc.fontSize(14).text(`${product.productData.title}, count: (${product.count}), price: $${product.productData.price}`)
+  }
+
+  pdfDoc.fontSize(16).text(`Total Price: $${order.totalPrice}`)
+
+
+
+  pdfDoc.end()
+
+
+
 }
 
 module.exports = {
