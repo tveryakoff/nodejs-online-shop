@@ -11,14 +11,19 @@ const createProduct = async (req, res, next) => {
     title: req.body.title, price: req.body.price, description: req.body.description, userId: user?._id
   }
 
-  console.log('FILES', req.file)
-
   if (!isEmpty) {
     return res.status(422).render('admin/product-form.pug', {
       pageTitle: 'Add product', path: '/admin/add-product', product: productData, isEdit: false, errors,
     })
   }
 
+  if (!req.file) {
+    return res.status(422).render('admin/product-form.pug', {
+      pageTitle: 'Add product', path: '/admin/add-product', product: productData, isEdit: false, errors: {image: 'Attach an image'},
+    })
+  }
+
+  productData.imageUrl = req.file.filename
 
   const product = new Product(productData)
 
@@ -42,6 +47,10 @@ const updateProduct = async (req, res) => {
     return res.status(422).render('admin/product-form.pug', {
       pageTitle: 'Edit product', path: '/admin/add-product', product: productData, isEdit: true, errors,
     })
+  }
+
+  if (req.file) {
+    productData.imageUrl = req.file.filename
   }
 
   try {
@@ -76,7 +85,7 @@ const getProductForm = async (req, res) => {
   if (productId) {
     const product = await Product.findById(productId)
     return res.render('admin/product-form.pug', {
-      pageTitle: 'Edit product', path: '/admin/add-product', product, isEdit: true
+      pageTitle: 'Edit product', path: '/admin/edit-product', product, isEdit: true
     })
   }
 

@@ -12,7 +12,7 @@ block content
             h1.product-item__header #{product.title}
             .product__inner
               .product__image-wrapper
-                img.product__image(src=product.imageUrl || 'https://sacajaweaaudubon.org/wp-content/uploads/2020/06/a-lot-of-books-clipart-6.png', alt="product-image")
+                img.product__image(src=`/uploads/${product.imageUrl}` || 'https://sacajaweaaudubon.org/wp-content/uploads/2020/06/a-lot-of-books-clipart-6.png', alt="product-image")
               p.product__description #{product.description}
               h3.product__price #{product.price}$
           div.card__actions

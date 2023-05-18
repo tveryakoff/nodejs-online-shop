@@ -4,7 +4,7 @@ block styles
   link(rel="stylesheet", href="/css/core/form.css")
 block content
   section.main-section
-    form.form(method="post", action=`${isEdit ? `/admin/product-edit?_csrf=${csrfToken}` : `/admin/product-add?_csrf=${csrfToken}`}`, novalidate="true" enctype="multipart/form-data")
+    form.form(method="POST", action=`${isEdit ? `/admin/product-edit?_csrf=${csrfToken}` : `/admin/product-add?_csrf=${csrfToken}`}`, novalidate, enctype="multipart/form-data")
       input(type="hidden" name="_csrf" value=csrfToken)
       if (isEdit)
         input.form__input(type="hidden", name="_id", value=product._id)
@@ -22,16 +22,16 @@ block content
             .error #{errors.image}
 
       .input-wrapper
-        label.input-label(for="image") Price
+        label.input-label(for="price") Price
         .input-error-wrapper
           input.form__input(class = errors && errors.price && 'for__input_error', id="price", type="number", name="price", step="0.01" value=isEdit && product.price)
           if (errors && errors.price)
             .error #{errors.price}
       .input-wrapper
-        label.input-label(for="image") Description
+        label.input-label(for="description") Description
         .input-error-wrapper
           textarea.form__input.add-product-form__textarea(class = errors && errors.description && 'for__input_error', id="description", rows="5", name="description" ) #{isEdit ? product.description : ''}
           if (errors && errors.description)
             .error #{errors.description}
-      button.form__button(type="submit") #{isEdit ? 'Edit' : 'Create'}
+      button.form__button(type="submit", formmethod="post") #{isEdit ? 'Edit' : 'Create'}
 
