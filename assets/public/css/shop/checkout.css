@@ -1,0 +1,38 @@
+.checkout__list {
+    margin-top: 24px;
+}
+.checkout__product {
+    display: flex;
+    flex-direction: row;
+    padding: 12px;
+    box-shadow: 0px 0px 4px 2px #a799e8;
+    margin-bottom: 24px;
+
+}
+
+.checkout__product__image {
+    width: 50px;
+}
+
+.checkout__product__data {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 24px;
+}
+
+.checkout__payment {
+    outline: none;
+    margin-top: 24px;
+    padding: 8px;
+    background-color: unset;
+    color: #353cd5;
+    border: 1px solid #353cd5;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.checkout__payment:hover {
+    background-color: #353cd5;
+    color: white;
+}

@@ -1,7 +1,20 @@
 extends ../layouts/shop/main
 
 block styles
-  link(rel="stylesheet", href="/css/shop.css")
+  link(rel="stylesheet", href="/css/shop/checkout.css")
 block content
   h1 Checkout
+  if productList.length > 0
+    .checkout__list
+      each product in productList
+        div.checkout__product
+          img.checkout__product__image(src=`/uploads/${product.productData.imageUrl}`)
+          .checkout__product__data
+            h3.checkout__product__title #{product.productData.title}
+            span.checkout__product__price $#{product.productData.price}
+            span.checkout__product__count Total: #{product.count}
+    button.checkout__payment Proceed to Payment
+
+  else
+    h1 No items
 

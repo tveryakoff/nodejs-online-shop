@@ -57,11 +57,12 @@ const getProductById = async (req, res, next) => {
 const getCart = async (req, res, next) => {
   const user = getCurrentUser(req)
   await user.populate('cart.items.cartProductId')
+  console.dir(user, {depth:5 })
   return res.render('shop/cart', {
     pageTitle: 'Your Cart',
     path: '/cart',
     productList: user.cart.items,
-    totalPrice: user.totalPrice,
+    totalPrice: user.cart.totalPrice,
     userId: user._id
   })
 }
@@ -74,6 +75,18 @@ const addProductToCart = async (req, res) => {
   }
   await user.addProductToCart(productId)
   return res.redirect('/cart')
+}
+
+const getCheckout = async (req, res) => {
+  const user = getCurrentUser(req)
+  await user.populate('cart.items.cartProductId')
+  await user.populate('cart.totalPrice')
+
+  res.render('shop/checkout', {pageTitle: 'checkout', path: '/checkout', totalPrice: user.cart.totalPrice,
+    productList: user.cart.items.map(item => ({
+      count: item.count,
+      productData: {title: item.cartProductId.title, imageUrl: item.cartProductId.imageUrl, price: item.cartProductId.price, _id: item.cartProductId._id}
+    }))})
 }
 
 const createOrder = async (req, res) => {
@@ -126,10 +139,6 @@ const getOrderList = async (req, res) => {
   const user = getCurrentUser(req)
   const orderList = await Order.find({"user.userId": user._id})
   res.render('shop/orderList.pug', {pageTitle: 'Your orders', path: '/order-list', orderList})
-}
-
-const getCheckout = (req, res) => {
-  res.render('shop/checkout', {pageTitle: 'checkout', path: '/checkout'})
 }
 
 const downloadInvoice = async (req, res) => {

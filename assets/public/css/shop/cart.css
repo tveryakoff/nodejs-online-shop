@@ -21,3 +21,13 @@
 .cart-price__wrapper {
     margin-top: 2rem;
 }
+
+.cart__checkout-link {
+    display: block;
+    margin-top: 48px;
+    font-size: 18px;
+    padding: 0.5rem;
+    border: 1px solid #9a34f3;
+    color: #9a34f3;
+    width: fit-content;
+}
