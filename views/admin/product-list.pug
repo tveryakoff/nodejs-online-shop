@@ -3,13 +3,15 @@ extends ../layouts/shop/main
 block styles
   link(rel="stylesheet", href="/css/shop/product-list.css")
   link(rel="stylesheet", href="/css/admin/product-list.css")
+  script(type="text/javascript" src="/js/shop.js")
 block content
   if productList.length > 0
     div.product-list
       each product in productList
-        a.product-item(href=`/product-detail/${product._id}`)
+        article.product-item
           div.product__body
-            h1.product-item__header #{product.title}
+            a.product-item(href=`/product-detail/${product._id}`)
+              h1.product-item__header #{product.title}
             .product__inner
               .product__image-wrapper
                 img.product__image(src=`/uploads/${product.imageUrl}` || 'https://sacajaweaaudubon.org/wp-content/uploads/2020/06/a-lot-of-books-clipart-6.png', alt="product-image")
@@ -20,10 +22,9 @@ block content
               form(action=`/admin/product-edit/${product._id}`, method="GET")
                 input(type="hidden" name="_csrf" value=csrfToken)
                 button.btn-action.product__add-to-cart(href=`admin/product-edit/${product._id}`) Edit
-              form(action=`/admin/product-delete`, method="POST")
-                input(type="hidden" name="_csrf" value=csrfToken)
-                input(type="hidden", name="productId", value=product._id)
-                button.btn-action-danger.product__add-to-cart.admin__delete-button(type="submit") Delete
+              input(type="hidden" name="_csrf" value=csrfToken)
+              input(type="hidden", name="productId", value=product._id)
+              button.btn-action-danger.product__add-to-cart.admin__delete-button(onclick=`deleteProduct('${csrfToken}', '${product._id}', this)`) Delete
 
   else
     h1 No products

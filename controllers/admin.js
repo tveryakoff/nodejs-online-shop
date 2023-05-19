@@ -75,6 +75,17 @@ const deleteProduct = async (req, res) => {
   return res.redirect('/admin/product-list')
 }
 
+const deleteProductRest = async (req, res) => {
+  try {
+    const id = req.params.productId
+    await Product.deleteOne({_id: id})
+    return res.status(200).json({status: 'deleted'})
+    }
+  catch (e) {
+    return res.status(500).json({status: 'error'})
+  }
+}
+
 const getProducts = async (req, res) => {
   const user = getCurrentUser(req)
  const productList = await Product.find({userId: user._id})
@@ -100,6 +111,6 @@ const getProductForm = async (req, res) => {
 }
 
 module.exports = {
-  getProductForm, createProduct, getProducts, updateProduct, deleteProduct
+  getProductForm, createProduct, getProducts, updateProduct, deleteProduct, deleteProductRest
 }
 

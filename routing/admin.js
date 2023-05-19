@@ -1,5 +1,5 @@
 const express = require('express')
-const { createProduct,getProducts, getProductForm,updateProduct, deleteProduct} = require("../controllers/admin");
+const { createProduct,getProducts, getProductForm,updateProduct, deleteProduct, deleteProductRest} = require("../controllers/admin");
 const {validateCreateEditProduct} = require("../validators/admin");
 const multer = require('multer')
 const storage = require("../services/FileStorage");
@@ -31,6 +31,8 @@ adminRouts.post('/product-add', upload.single('image'), validateCreateEditProduc
 adminRouts.post('/product-edit',  upload.single('image'), validateCreateEditProduct, updateProduct)
 
 adminRouts.post('/product-delete', deleteProduct)
+
+adminRouts.delete('/product/:productId', deleteProductRest)
 
 
 module.exports = {
