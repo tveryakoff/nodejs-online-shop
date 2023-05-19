@@ -1,0 +1,4 @@
+if pages.length > 0
+  section.pagination
+    each page in pages
+      a.pagination__link(href=`?page=${page}`, class = page === activePage ? 'pagination__link-active': '') #{page}

@@ -1,7 +1,8 @@
 extends ../layouts/shop/main
 
 block styles
-  link(rel="stylesheet", href="/css/shop.css")
+  link(rel="stylesheet", href="/css/shop/index.css")
 block content
-  h1 Welcome to my awesome shop!
+  h1.index__header Welcome to my awesome shop!
+  include ../components/product-list
 

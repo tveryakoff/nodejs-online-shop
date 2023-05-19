@@ -1,29 +1,5 @@
 extends ../layouts/shop/main
 
-block styles
-  link(rel="stylesheet", href="/css/shop/product-list.css")
 block content
-  if productList.length > 0
-    div.product-list
-      each product in productList
-        a.product-item(href=`/product-detail/${product._id}`)
-          div.product__body
-            h1.product-item__header #{product.title}
-            .product__inner
-              .product__image-wrapper
-                img.product__image(src=`/uploads/${product.imageUrl}` || 'https://sacajaweaaudubon.org/wp-content/uploads/2020/06/a-lot-of-books-clipart-6.png', alt="product-image")
-              p.product__description #{product.description}
-              h3.product__price #{product.price}$
-          if isLoggedIn
-            form.card__actions(action='/cart-add-product', method='POST')
-              input(type="hidden" name="_csrf" value=csrfToken)
-              input(name="productId" type="hidden", value=product._id)
-              button.btn-action.product__add-to-cart(type="submit") Add to Cart
-  else
-    h1 No products
-
-  if pages.length > 0
-    section.pagination
-      each page in pages
-        a.pagination__link(href=`?page=${page}`, class = page === activePage ? 'pagination__link-active': '') #{page}
+  include ../components/product-list
 

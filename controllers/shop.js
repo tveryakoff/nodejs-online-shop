@@ -5,36 +5,36 @@ const path = require('path')
 const fs = require('fs')
 const Pdfkit = require('pdfkit')
 const rootDir = require('../constants/rootDir')
+const {getPaginationData} = require("../utils/pagination");
+
+const getProductsWithPagination = async (page, limit) => {
+  const totalProductCountPromise = Product.find().countDocuments()
+  const productListPromise = Product.find().skip((page - 1) * limit).limit(limit)
+  const [{value: productList}, {value: total}] = await Promise.allSettled([productListPromise, totalProductCountPromise])
+
+  const pages = getPaginationData({totalElements: total, limit, pageDisplayCount: 5, currentPage: page})
+
+  return {
+    productList,
+    total,
+    pages,
+  }
+}
 
 const getIndex = async (req, res) => {
-  const productList = await Product.find()
+  const page = +req.query.page || 1
+  const limit = +req.query.limit || 2
+  const {productList, total, pages, } = await getProductsWithPagination(page, limit)
 
   res.render('shop/index.pug', {
-    productList, pageTitle: 'Welcome', path: '/'
+    productList, pageTitle: 'Welcome', path: '/', activePage: page,  pages, total
   })
 }
 
 const getProducts = async (req, res, next) => {
   const page = +req.query.page || 1
-  const limit = +req.query.limit || 1
-
-  const totalProductCountPromise = Product.find().countDocuments()
-  const productListPromise = Product.find().skip((page - 1) * limit).limit(limit)
-  const [{value: productList}, {value: total}] = await Promise.allSettled([productListPromise, totalProductCountPromise])
-
-  const pageDisplayCount = 5
-
-
-  const totalPages = Math.ceil(total / limit)
-
-
-  const start = Math.max(1, Math.min(page - Math.floor(pageDisplayCount / 2), totalPages - pageDisplayCount))
-
-  const end = Math.min(totalPages, start + pageDisplayCount)
-
-  const allPages = Array.from({ length: totalPages + 1 }, (_, index) => index)
-
-  const pages = allPages.slice(start, end + 1)
+  const limit = +req.query.limit || 2
+  const {productList, total, pages, } = await getProductsWithPagination(page,limit)
 
   return res.render('shop/product-list.pug', {
     productList,
