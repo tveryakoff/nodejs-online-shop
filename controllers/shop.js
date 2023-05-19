@@ -1,5 +1,5 @@
 const {Product} = require('../models/product')
-const Order =require('../models/orders')
+const Order = require('../models/orders')
 const getCurrentUser = require('../utils/getUser')
 const path = require('path')
 const fs = require('fs')
@@ -15,9 +15,34 @@ const getIndex = async (req, res) => {
 }
 
 const getProducts = async (req, res, next) => {
-  const productList = await Product.find()
-  res.render('shop/product-list.pug', {
-    productList, pageTitle: 'product-list', path: '/product-list'
+  const page = +req.query.page || 1
+  const limit = +req.query.limit || 1
+
+  const totalProductCountPromise = Product.find().countDocuments()
+  const productListPromise = Product.find().skip((page - 1) * limit).limit(limit)
+  const [{value: productList}, {value: total}] = await Promise.allSettled([productListPromise, totalProductCountPromise])
+
+  const pageDisplayCount = 5
+
+
+  const totalPages = Math.ceil(total / limit)
+
+
+  const start = Math.max(1, Math.min(page - Math.floor(pageDisplayCount / 2), totalPages - pageDisplayCount))
+
+  const end = Math.min(totalPages, start + pageDisplayCount)
+
+  const allPages = Array.from({ length: totalPages + 1 }, (_, index) => index)
+
+  const pages = allPages.slice(start, end + 1)
+
+  return res.render('shop/product-list.pug', {
+    productList,
+    total,
+    pages,
+    activePage: page,
+    pageTitle: 'product-list',
+    path: '/product-list'
   })
 }
 
@@ -32,7 +57,13 @@ const getProductById = async (req, res, next) => {
 const getCart = async (req, res, next) => {
   const user = getCurrentUser(req)
   await user.populate('cart.items.cartProductId')
-  return res.render('shop/cart', {pageTitle: 'Your Cart', path: '/cart', productList: user.cart.items, totalPrice: user.totalPrice, userId: user._id})
+  return res.render('shop/cart', {
+    pageTitle: 'Your Cart',
+    path: '/cart',
+    productList: user.cart.items,
+    totalPrice: user.totalPrice,
+    userId: user._id
+  })
 }
 
 const addProductToCart = async (req, res) => {
@@ -55,7 +86,10 @@ const createOrder = async (req, res) => {
       userId: user?._id,
     },
     totalPrice: user.cart.totalPrice,
-    products: user.cart.items.map(item => ({count: item.count, productData: {title: item.cartProductId.title, price: item.cartProductId.price, _id: item.cartProductId._id}}))
+    products: user.cart.items.map(item => ({
+      count: item.count,
+      productData: {title: item.cartProductId.title, price: item.cartProductId.price, _id: item.cartProductId._id}
+    }))
   })
   await order.save()
   await user.clearCart()
@@ -90,7 +124,7 @@ const deleteProductFromCart = async (req, res) => {
 
 const getOrderList = async (req, res) => {
   const user = getCurrentUser(req)
-  const orderList  = await Order.find({"user.userId": user._id})
+  const orderList = await Order.find({"user.userId": user._id})
   res.render('shop/orderList.pug', {pageTitle: 'Your orders', path: '/order-list', orderList})
 }
 

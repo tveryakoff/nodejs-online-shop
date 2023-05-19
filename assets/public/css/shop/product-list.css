@@ -11,8 +11,7 @@
     flex-direction: column;
     justify-content: space-between;
     border-radius: 4px;
-    box-shadow: 1px 2px 2px #b497d9, -1px -2px 2px #b497d9;
-    background-color: rgba(209, 206, 234, 0.97);
+    border: 1px solid #a2a2a2;
 }
 
 .product-item:hover {
@@ -73,5 +72,29 @@
     margin-top: 0.5rem;
 }
 
+.pagination {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.pagination__link {
+    text-decoration: none;
+    color: #8b30e3;
+    padding: 0 0.5rem;
+    border: 1px solid #8b30e3;
+    margin-left: 2px;
+}
+
+.pagination__link:first-child {
+    margin-left: 0;
+}
+
+.pagination__link-active {
+    color: #0564f1;
+    border: 1px solid #0564f1;
+
+}
 
 
