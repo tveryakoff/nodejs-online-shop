@@ -1,7 +1,9 @@
 extends ../layouts/shop/main
 
+
 block styles
   link(rel="stylesheet", href="/css/shop/checkout.css")
+  script(src="https://js.stripe.com/v3/")
 block content
   h1 Checkout
   if productList.length > 0
@@ -13,7 +15,9 @@ block content
             h3.checkout__product__title #{product.productData.title}
             span.checkout__product__price $#{product.productData.price}
             span.checkout__product__count Total: #{product.count}
-    button.checkout__payment Proceed to Payment
+    form(method="post", action="/checkout-processPayment")
+      input(type="hidden" name="_csrf" value=csrfToken)
+      button.checkout__payment(type='submit',id="checkout-button") Proceed to Payment
 
   else
     h1 No items

@@ -9,7 +9,8 @@ const {
   addProductToCart,
   deleteProductFromCart,
   createOrder, getUserOrder,
-  downloadInvoice
+  downloadInvoice,
+  processPayment
 } = require("../controllers/shop");
 const {requireAuth} = require("../middlewares/auth");
 
@@ -25,7 +26,6 @@ shopRoutes.get('/cart', requireAuth, getCart)
 
 shopRoutes.post('/cart-add-product', requireAuth, addProductToCart)
 
-shopRoutes.post('/cart-create-order', requireAuth, createOrder)
 
 shopRoutes.get('/order/:orderId', requireAuth, getUserOrder)
 
@@ -33,7 +33,10 @@ shopRoutes.post('/cart-delete-product',requireAuth, deleteProductFromCart)
 
 shopRoutes.get('/order-list',requireAuth, getOrderList)
 
-shopRoutes.get('/checkout', requireAuth, getCheckout)
+shopRoutes.get('/checkout', requireAuth, getCheckout),
+shopRoutes.post('/checkout-processPayment', requireAuth, processPayment),
+shopRoutes.get('/cart-create-order', requireAuth, createOrder)
+
 
 shopRoutes.get('/order-invoice/:orderId', requireAuth, downloadInvoice)
 

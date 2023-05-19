@@ -6,6 +6,7 @@ const fs = require('fs')
 const Pdfkit = require('pdfkit')
 const rootDir = require('../constants/rootDir')
 const {getPaginationData} = require("../utils/pagination");
+const stripe = require('stripe')(process.env.STRIPE_ID)
 
 const getProductsWithPagination = async (page, limit) => {
   const totalProductCountPromise = Product.find().countDocuments()
@@ -82,11 +83,43 @@ const getCheckout = async (req, res) => {
   await user.populate('cart.items.cartProductId')
   await user.populate('cart.totalPrice')
 
+
   res.render('shop/checkout', {pageTitle: 'checkout', path: '/checkout', totalPrice: user.cart.totalPrice,
     productList: user.cart.items.map(item => ({
       count: item.count,
       productData: {title: item.cartProductId.title, imageUrl: item.cartProductId.imageUrl, price: item.cartProductId.price, _id: item.cartProductId._id}
     }))})
+}
+
+const processPayment = async (req,res,next) => {
+  const user = getCurrentUser(req)
+  await user.populate('cart.items.cartProductId')
+  await user.populate('cart.totalPrice')
+
+  const total = user.cart.totalPrice
+  const productList =  user.cart.items.map(item => ({
+    count: item.count,
+    productData: {title: item.cartProductId.title, imageUrl: item.cartProductId.imageUrl, price: item.cartProductId.price, _id: item.cartProductId._id}
+  }))
+
+
+  const session = await stripe.checkout.sessions.create({
+    line_items: productList.map(product => ({
+      price_data: {
+        currency: 'usd',
+        product_data: {
+          name: product.productData.title
+        },
+        unit_amount: +product.productData.price * +product.count * 100,
+      },
+      quantity: product.count,
+    })),
+    mode: 'payment',
+    success_url: `${req.protocol}://${req.get('host')}/cart-create-order`,
+    cancel_url: `${req.protocol}://${req.get('host')}/checkout-failure`,
+  });
+
+  return  res.redirect(303, session.url);
 }
 
 const createOrder = async (req, res) => {
@@ -180,6 +213,7 @@ module.exports = {
   getProductById,
   getCart,
   getCheckout,
+  processPayment,
   getOrderList,
   addProductToCart,
   deleteProductFromCart,

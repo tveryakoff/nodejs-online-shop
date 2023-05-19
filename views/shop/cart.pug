@@ -20,9 +20,8 @@ block content
     .cart-price__wrapper
       span Total: #{totalPrice}$
       a.cart__checkout-link(href="/checkout") Go to the checkout page!
-      //form(action="/cart-create-order", method="POST")
-      //  input(type="hidden" name="_csrf" value=csrfToken)
-      //  button.btn-action(type="submit") Order Now !
+  else
+    h1 Cart is empty;(
 
 
 
